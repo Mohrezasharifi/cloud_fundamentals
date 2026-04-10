@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cloud Fundamentals Hub</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#080C16;--s1:#0E1420;--s2:#14203A;--s3:#1A2B4A;--t1:#F2F6FF;--t2:#8A9EC0;--t3:#3D5270;--bd:rgba(255,255,255,.07);--bd2:rgba(255,255,255,.15);--acc:#FF9900;--acc-bg:rgba(255,153,0,.1);--acc-bd:rgba(255,153,0,.28);--mono:"Space Mono",monospace;--sans:"Manrope",sans-serif;--r:10px;--rl:16px}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--t1);font-family:var(--sans);min-height:100vh;overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0;background-image:linear-gradient(rgba(255,153,0,.018) 1px,transparent 1px),linear-gradient(90deg,rgba(255,153,0,.018) 1px,transparent 1px);background-size:44px 44px;pointer-events:none;z-index:0}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.75)}}
+#landing{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:48px 20px;text-align:center;position:relative;z-index:1}
+.land-blob{position:absolute;top:40%;left:50%;transform:translate(-50%,-50%);width:800px;height:500px;background:radial-gradient(ellipse,rgba(255,153,0,.1) 0%,rgba(0,102,255,.07) 45%,transparent 70%);pointer-events:none;filter:blur(10px)}
+.land-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(255,153,0,.08);border:1px solid rgba(255,153,0,.2);border-radius:100px;padding:6px 16px;margin-bottom:24px;animation:fadeUp .5s ease both}
+.land-dot{width:7px;height:7px;border-radius:50%;background:#FF9900;box-shadow:0 0 8px #FF9900;animation:pulse 2s infinite}
+.land-badge span{font-family:var(--mono);font-size:10px;color:#FF9900;letter-spacing:.1em}
+.land-title{font-size:clamp(28px,7vw,58px);font-weight:800;line-height:1.05;letter-spacing:-.03em;margin-bottom:10px;animation:fadeUp .5s .1s ease both}
+.land-title em{font-style:normal;background:linear-gradient(135deg,#FF9900,#0066FF,#23C55E);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.land-sub{font-size:14px;color:var(--t2);max-width:540px;line-height:1.65;margin-bottom:16px;font-weight:400;animation:fadeUp .5s .2s ease both}
+.platform-tabs{display:flex;gap:8px;margin-bottom:28px;animation:fadeUp .5s .25s ease both;flex-wrap:wrap;justify-content:center}
+.ptab{padding:7px 18px;border-radius:100px;border:1px solid var(--bd);background:var(--s2);color:var(--t3);font-size:11px;font-family:var(--mono);cursor:pointer;transition:all .2s}
+.ptab:hover{color:var(--t2);border-color:var(--bd2)}
+.ptab.active{color:var(--t1);border-color:var(--acc-bd);background:var(--acc-bg)}
+.cert-picker{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;width:100%;max-width:860px;animation:fadeUp .5s .3s ease both}
+.cc{border-radius:var(--rl);padding:22px 18px;text-align:left;cursor:pointer;transition:transform .2s,box-shadow .2s,border-color .2s;border:1px solid var(--bd);position:relative;overflow:hidden}
+.cc:hover{transform:translateY(-4px)}
+.cc-aws{background:linear-gradient(140deg,#140D00,#1A1200)}.cc-aws:hover{border-color:rgba(255,153,0,.5);box-shadow:0 16px 48px rgba(255,153,0,.1)}.cc-aws .cc-code{color:#FF9900}.cc-aws .cc-pill{background:rgba(255,153,0,.1);color:#FFD580;border:1px solid rgba(255,153,0,.25)}.cc-aws .cc-cta{background:#FF9900;color:#000}
+.cc-db{background:linear-gradient(140deg,#190004,#200008)}.cc-db:hover{border-color:rgba(255,51,51,.5);box-shadow:0 16px 48px rgba(255,51,51,.1)}.cc-db .cc-code{color:#FF3333}.cc-db .cc-pill{background:rgba(255,51,51,.1);color:#FF9999;border:1px solid rgba(255,51,51,.25)}.cc-db .cc-cta{background:#FF3333;color:#fff}
+.cc-gh{background:linear-gradient(140deg,#0A0E0A,#0E140E)}.cc-gh:hover{border-color:rgba(35,197,94,.5);box-shadow:0 16px 48px rgba(35,197,94,.1)}.cc-gh .cc-code{color:#23C55E}.cc-gh .cc-pill{background:rgba(35,197,94,.1);color:#86EFAC;border:1px solid rgba(35,197,94,.25)}.cc-gh .cc-cta{background:#23C55E;color:#000}
+.cc-code{font-family:var(--mono);font-size:20px;font-weight:700;margin-bottom:6px;line-height:1}.cc-name{font-size:13px;font-weight:700;color:var(--t1);margin-bottom:4px}.cc-desc{font-size:11px;color:var(--t2);line-height:1.55;font-weight:400;margin-bottom:11px}
+.cc-pills{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:12px}.cc-pill{font-family:var(--mono);font-size:9px;padding:2px 7px;border-radius:4px}
+.cc-cta{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;padding:7px 14px;border-radius:var(--r);border:none;cursor:pointer;font-family:var(--sans);transition:opacity .15s}.cc-cta:hover{opacity:.85}
+.hub-tagline{display:flex;gap:16px;margin-top:20px;animation:fadeUp .5s .35s ease both;flex-wrap:wrap;justify-content:center}
+.hub-tag{font-family:var(--mono);font-size:10px;color:var(--t3);display:flex;align-items:center;gap:5px}
+.hub-tag-dot{width:5px;height:5px;border-radius:50%}
+#hub{display:none;position:relative;z-index:1}
+.topbar{position:sticky;top:0;z-index:200;background:rgba(8,12,22,.93);backdrop-filter:blur(18px);border-bottom:1px solid var(--bd);display:flex;align-items:center;overflow-x:auto;scrollbar-width:none;padding:0 16px;gap:0}
+.topbar::-webkit-scrollbar{display:none}
+.tb-brand{display:flex;flex-direction:column;justify-content:center;padding:8px 14px 8px 0;border-right:1px solid var(--bd);margin-right:2px;cursor:pointer;flex-shrink:0}
+.tb-brand-code{font-family:var(--mono);font-size:13px;font-weight:700;color:var(--acc);transition:color .3s;line-height:1}
+.tb-brand-sub{font-size:9px;color:var(--t3);font-family:var(--mono);letter-spacing:.07em;margin-top:2px}
+.cert-switcher{display:flex;border-right:1px solid var(--bd);flex-shrink:0}
+.ctab{padding:12px 12px;font-size:10px;font-weight:700;color:var(--t3);cursor:pointer;border:none;background:none;border-bottom:2px solid transparent;white-space:nowrap;font-family:var(--mono);transition:color .2s,border-color .2s}
+.ctab:hover{color:var(--t2)}.ctab.active{color:var(--acc);border-bottom-color:var(--acc)}
+.sec-tabs{display:flex;flex:1}
+.stab{padding:12px 11px;font-size:11px;font-weight:600;color:var(--t3);cursor:pointer;border:none;background:none;border-bottom:2px solid transparent;white-space:nowrap;font-family:var(--sans);transition:color .2s,border-color .2s}
+.stab:hover{color:var(--t2)}.stab.active{color:var(--acc);border-bottom-color:var(--acc)}
+.stab-updates{position:relative}.stab-updates::after{content:"AI";position:absolute;top:6px;right:1px;font-size:7px;font-family:var(--mono);background:var(--acc);color:#000;padding:1px 4px;border-radius:3px;letter-spacing:.04em;font-weight:700}
+.back-btn{margin-left:auto;padding:5px 10px;border-radius:var(--r);border:1px solid var(--bd);background:transparent;color:var(--t3);font-size:9px;cursor:pointer;font-family:var(--mono);transition:color .2s,border-color .2s;white-space:nowrap;flex-shrink:0}
+.back-btn:hover{color:var(--t1);border-color:var(--bd2)}
+.streak-bar{background:var(--s2);border-bottom:1px solid var(--bd);padding:5px 20px;display:none;align-items:center;gap:14px;position:sticky;top:46px;z-index:150}
+.streak-bar.show{display:flex}
+.streak-item{font-family:var(--mono);font-size:10px;color:var(--t3);display:flex;align-items:center;gap:5px}
+.streak-dot{width:5px;height:5px;border-radius:50%;background:var(--acc)}.streak-val{color:var(--t1);font-weight:700}
+main{max-width:940px;margin:0 auto;padding:32px 18px 72px;position:relative;z-index:1}
+.panel{display:none}.panel.active{display:block;animation:fadeUp .3s ease both}
+.slabel{font-family:var(--mono);font-size:10px;color:var(--acc);letter-spacing:.18em;text-transform:uppercase;margin-bottom:4px;transition:color .3s}
+.stitle{font-size:22px;font-weight:800;color:var(--t1);margin-bottom:4px;letter-spacing:-.025em}
+.sdesc{font-size:12px;color:var(--t2);margin-bottom:22px;line-height:1.65;font-weight:400;max-width:640px}
+.cert-hero{border-radius:var(--rl);padding:18px 22px;margin-bottom:20px;display:flex;align-items:center;gap:18px;border:1px solid var(--acc-bd);background:var(--acc-bg);transition:all .3s;flex-wrap:wrap}
+.cert-hero-code{font-family:var(--mono);font-size:30px;font-weight:700;color:var(--acc);transition:color .3s;flex-shrink:0;line-height:1}
+.cert-hero-name{font-size:15px;font-weight:700;color:var(--t1);margin-bottom:3px}.cert-hero-meta{font-family:var(--mono);font-size:10px;color:var(--t2)}
+.cert-hero-tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:7px}.ctag{font-family:var(--mono);font-size:9px;padding:2px 7px;border-radius:4px;background:var(--acc-bg);color:var(--acc);border:1px solid var(--acc-bd);transition:all .3s}
+.dg{display:grid;gap:11px;margin-bottom:18px}.dcard{background:var(--s1);border:1px solid var(--bd);border-radius:var(--rl);padding:14px 18px;transition:border-color .2s,transform .15s}.dcard:hover{border-color:var(--bd2);transform:translateY(-1px)}
+.dcard-top{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.dpct{font-family:var(--mono);font-size:9px;padding:2px 8px;border-radius:100px;font-weight:700;background:var(--acc-bg);color:var(--acc);border:1px solid var(--acc-bd);transition:all .3s}
+.dname{font-size:13px;font-weight:700;color:var(--t1)}.chips{display:flex;flex-wrap:wrap;gap:4px}.chip{font-size:10px;font-family:var(--mono);padding:2px 7px;border-radius:5px;background:var(--s2);color:var(--t2);border:1px solid var(--bd)}
+.warn-box{background:rgba(245,158,11,.04);border:1px solid rgba(245,158,11,.18);border-radius:var(--rl);padding:13px 16px;margin-top:4px}.warn-lbl{font-family:var(--mono);font-size:9px;color:#F59E0B;letter-spacing:.12em;text-transform:uppercase;margin-bottom:7px}
+.warn-box ul{list-style:none;display:flex;flex-direction:column;gap:5px}.warn-box li{font-size:11px;color:var(--t2);padding-left:11px;border-left:2px solid rgba(245,158,11,.3);line-height:1.55}.warn-box li strong{color:var(--t1);font-weight:700}
+.reg-card{background:var(--s1);border:1px solid var(--bd);border-radius:var(--rl);padding:14px 18px;margin-top:14px}.reg-title{font-family:var(--mono);font-size:9px;color:var(--acc);letter-spacing:.14em;text-transform:uppercase;margin-bottom:9px;transition:color .3s}
+.reg-steps{list-style:none;display:flex;flex-direction:column;gap:5px}.reg-steps li{font-size:11px;color:var(--t2);display:flex;align-items:flex-start;gap:6px;line-height:1.55}
+.reg-steps li::before{content:">";color:var(--acc);font-family:var(--mono);flex-shrink:0;transition:color .3s}.reg-steps a{color:var(--acc);text-decoration:none;border-bottom:1px solid var(--acc-bd);transition:color .3s}.reg-steps a:hover{color:var(--t1)}
+.pbar-wrap{height:3px;background:var(--s3);border-radius:3px;overflow:hidden;margin-bottom:14px}.pbar{height:100%;border-radius:3px;background:var(--acc);transition:width .4s ease,background .3s}
+.fc-meta{display:flex;align-items:center;justify-content:space-between;margin-bottom:7px}.fc-count{font-family:var(--mono);font-size:11px;color:var(--t3)}
+.flashcard{background:var(--s1);border:1px solid var(--bd);border-radius:var(--rl);padding:34px 30px;min-height:180px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;cursor:pointer;transition:border-color .2s,transform .15s;margin-bottom:11px;position:relative;overflow:hidden}
+.flashcard:hover{border-color:var(--bd2);transform:translateY(-2px)}.flashcard::before{content:"";position:absolute;top:0;left:0;right:0;height:2px;background:var(--acc);transform:scaleX(0);transition:transform .3s,background .3s;transform-origin:left}.flashcard.flipped::before{transform:scaleX(1)}
+.fc-q{font-size:15px;font-weight:700;color:var(--t1);line-height:1.4;letter-spacing:-.01em}.fc-a{font-size:12px;color:var(--t2);margin-top:11px;line-height:1.7;display:none;font-weight:400}.fc-a.show{display:block;animation:fadeUp .2s ease both}
+.fc-hint{font-family:var(--mono);font-size:9px;color:var(--t3);margin-top:13px;letter-spacing:.1em;text-transform:uppercase}
+.fc-cat{position:absolute;top:11px;right:11px;font-family:var(--mono);font-size:9px;color:var(--t3);letter-spacing:.07em;text-transform:uppercase}
+.fc-doc{display:none;margin-top:9px;font-size:10px}.fc-doc.show{display:block}.fc-doc a{color:var(--acc);text-decoration:none;font-family:var(--mono);border-bottom:1px solid var(--acc-bd)}.fc-doc a:hover{color:var(--t1)}
+.fc-nav{display:flex;gap:7px;justify-content:center;flex-wrap:wrap}.filter-bar{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:13px}
+.fbtn{padding:3px 10px;border-radius:100px;border:1px solid var(--bd);background:var(--s2);color:var(--t3);font-size:10px;font-family:var(--mono);cursor:pointer;transition:all .15s}.fbtn:hover{color:var(--t2);border-color:var(--bd2)}.fbtn.active{background:var(--acc-bg);border-color:var(--acc-bd);color:var(--acc)}
+.btn{padding:7px 15px;border-radius:var(--r);border:1px solid var(--bd2);background:var(--s2);color:var(--t2);cursor:pointer;font-size:11px;font-family:var(--sans);font-weight:600;transition:all .15s}.btn:hover{background:var(--s3);color:var(--t1)}.btn:active{transform:scale(.97)}
+.btn-acc{background:var(--acc);color:#000;border-color:var(--acc);font-weight:700}.btn-acc:hover{opacity:.85}
+.qmeta{font-family:var(--mono);font-size:10px;color:var(--t3);margin-bottom:6px}
+.qcard{background:var(--s1);border:1px solid var(--bd);border-radius:var(--rl);padding:20px;margin-bottom:11px}
+.qq{font-size:14px;font-weight:700;color:var(--t1);line-height:1.5;margin-bottom:13px;letter-spacing:-.01em}
+.qopts{display:flex;flex-direction:column;gap:6px}
+.qopt{padding:9px 13px;border-radius:var(--r);border:1px solid var(--bd);background:var(--s2);color:var(--t2);cursor:pointer;font-size:12px;font-family:var(--sans);font-weight:400;transition:all .15s;text-align:left;width:100%}
+.qopt:hover:not(.disabled){background:var(--s3);color:var(--t1);border-color:var(--bd2)}.qopt.correct{background:rgba(35,197,94,.08);border-color:rgba(35,197,94,.4);color:#86EFAC}.qopt.wrong{background:rgba(244,63,94,.08);border-color:rgba(244,63,94,.4);color:#FB7185}.qopt.disabled{cursor:default}
+.qfb{display:none;margin-top:11px;padding:10px 13px;border-radius:var(--r);font-size:12px;line-height:1.6;font-weight:400}.qfb.show{display:block;animation:fadeUp .2s ease both}
+.qfb.correct{background:rgba(35,197,94,.06);border:1px solid rgba(35,197,94,.2);color:#86EFAC}.qfb.wrong{background:rgba(244,63,94,.06);border:1px solid rgba(244,63,94,.2);color:#FB7185}
+.qdoc{margin-top:6px;font-size:10px;font-family:var(--mono)}.qdoc a{color:var(--acc);text-decoration:none;border-bottom:1px solid var(--acc-bd)}.qfoot{display:flex;gap:7px;margin-top:11px}
+.rescrd{background:var(--s1);border:1px solid var(--bd);border-radius:var(--rl);padding:36px 22px;text-align:center}
+.rsc-n{font-family:var(--mono);font-size:56px;font-weight:700;line-height:1;margin-bottom:4px}.rsc-l{font-size:12px;color:var(--t2);margin-bottom:20px}
+.rsc-g{display:grid;grid-template-columns:1fr 1fr;gap:9px;max-width:280px;margin:0 auto 20px}.rsc-s{background:var(--s2);border-radius:var(--r);padding:11px}
+.rsc-sn{font-size:18px;font-weight:700;font-family:var(--mono)}.rsc-sl{font-size:9px;color:var(--t3);margin-top:2px;text-transform:uppercase;letter-spacing:.08em}
+.cheat-sec{margin-bottom:22px}.cheat-ttl{font-family:var(--mono);font-size:10px;color:var(--acc);letter-spacing:.15em;text-transform:uppercase;margin-bottom:8px;padding-bottom:5px;border-bottom:1px solid var(--bd);transition:color .3s}
+.ctable{width:100%;border-collapse:collapse}.ctable th{text-align:left;font-size:9px;font-family:var(--mono);color:var(--t3);text-transform:uppercase;letter-spacing:.1em;padding:6px 9px;background:var(--s2);border:1px solid var(--bd)}
+.ctable td{padding:7px 9px;font-size:11px;border:1px solid var(--bd);background:var(--s1);color:var(--t1);vertical-align:top;line-height:1.5;font-weight:400}.ctable tr:hover td{background:var(--s2)}
+.ckey{color:var(--acc);font-family:var(--mono);font-size:10px;font-weight:700;transition:color .3s}.dbadge{font-size:9px;font-family:var(--mono);color:var(--acc);border:1px solid var(--acc-bd);border-radius:3px;padding:1px 5px;margin-left:4px;text-decoration:none;opacity:.65;transition:opacity .15s}.dbadge:hover{opacity:1}
+.plan-g{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin-bottom:12px}@media(max-width:540px){.plan-g{grid-template-columns:1fr}}
+.pday{background:var(--s1);border:1px solid var(--bd);border-radius:var(--rl);padding:14px}.pday-lbl{font-family:var(--mono);font-size:9px;color:var(--acc);text-transform:uppercase;letter-spacing:.14em;margin-bottom:9px;transition:color .3s}
+.ptask{display:flex;align-items:flex-start;gap:7px;padding:5px 0;border-bottom:1px solid var(--bd);font-size:11px;font-weight:400;color:var(--t2);cursor:pointer;transition:color .15s}.ptask:last-child{border-bottom:none}.ptask:hover{color:var(--t1)}
+.pcheck{width:13px;height:13px;border:1px solid var(--bd2);border-radius:3px;flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;transition:background .15s,border-color .15s}
+.ptask.done .pcheck{background:var(--acc);border-color:var(--acc)}.ptask.done .pcheck::after{content:"v";font-size:9px;color:#000;font-weight:700}.ptask.done .ptask-text{text-decoration:line-through;color:var(--t3)}
+.res-sec{font-family:var(--mono);font-size:10px;color:var(--t3);text-transform:uppercase;letter-spacing:.13em;margin:18px 0 9px;padding-bottom:5px;border-bottom:1px solid var(--bd)}
+.res-g{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:11px}
+.rcard{background:var(--s1);border:1px solid var(--bd);border-radius:var(--rl);padding:14px;text-decoration:none;display:block;transition:border-color .2s,transform .2s}.rcard:hover{border-color:var(--bd2);transform:translateY(-2px)}
+.rcard-type{font-family:var(--mono);font-size:9px;color:var(--t3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:7px}.rcard-title{font-size:12px;font-weight:700;color:var(--t1);margin-bottom:4px}.rcard-desc{font-size:11px;color:var(--t2);line-height:1.5;font-weight:400}
+.rcard-tag{display:inline-block;margin-top:7px;font-size:9px;font-family:var(--mono);padding:2px 6px;border-radius:3px;background:var(--acc-bg);color:var(--acc);border:1px solid var(--acc-bd);transition:all .3s}
+.ai-checker{background:var(--s2);border:1px solid var(--acc-bd);border-radius:var(--rl);padding:18px;margin-bottom:18px}.ai-checker-title{font-size:13px;font-weight:700;color:var(--t1);margin-bottom:5px}.ai-checker-desc{font-size:11px;color:var(--t2);margin-bottom:13px;line-height:1.55}
+.ai-response{background:var(--s1);border:1px solid var(--bd);border-radius:var(--r);padding:13px;margin-top:11px;font-size:12px;color:var(--t2);line-height:1.7;display:none}.ai-response.show{display:block;animation:fadeUp .3s ease both}
+.ai-thinking{display:flex;align-items:center;gap:7px;font-family:var(--mono);font-size:10px;color:var(--acc)}
+.ai-dot{width:5px;height:5px;border-radius:50%;background:var(--acc);animation:pulse 1.2s infinite}.ai-dot:nth-child(2){animation-delay:.2s}.ai-dot:nth-child(3){animation-delay:.4s}
+.update-card{background:var(--s1);border:1px solid var(--bd);border-radius:var(--rl);padding:16px;margin-bottom:11px}.update-card-header{display:flex;align-items:center;gap:8px;margin-bottom:9px}
+.update-badge{font-family:var(--mono);font-size:9px;padding:2px 7px;border-radius:4px;background:var(--acc-bg);color:var(--acc);border:1px solid var(--acc-bd);text-transform:uppercase;letter-spacing:.08em}
+.update-date{font-family:var(--mono);font-size:10px;color:var(--t3)}.update-title{font-size:13px;font-weight:700;color:var(--t1);margin-bottom:5px}.update-body{font-size:11px;color:var(--t2);line-height:1.6;font-weight:400}
+.ai-output-text{white-space:pre-wrap}
+.kbd-hint{position:fixed;bottom:16px;right:16px;background:var(--s2);border:1px solid var(--bd2);border-radius:var(--r);padding:8px 12px;font-family:var(--mono);font-size:9px;color:var(--t3);z-index:300;display:none;gap:8px;flex-wrap:wrap}.kbd-hint.show{display:flex}
+.kbd-key{background:var(--s3);border:1px solid var(--bd2);border-radius:4px;padding:1px 6px;color:var(--t2)}
+.hub-footer{text-align:center;padding:14px 20px;font-family:var(--mono);font-size:9px;color:var(--t3);border-top:1px solid var(--bd);position:relative;z-index:1;letter-spacing:.06em}
+::-webkit-scrollbar{width:5px;height:5px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--s3);border-radius:3px}
+</style>
+</head>
+<body>
+
+<div id="landing">
+  <div class="land-blob"></div>
+  <div class="land-badge"><div class="land-dot"></div><span>AWS - Databricks - GitHub - Fundamentals</span></div>
+  <div class="land-title">Cloud<br><em>Fundamentals Hub</em></div>
+  <p class="land-sub">One platform to prepare, practice and pass foundational certifications across AWS, Databricks, and GitHub. Pick your platform below.</p>
+  <div class="platform-tabs">
+    <button class="ptab active" onclick="filterPlatform('all',this)">All platforms</button>
+    <button class="ptab" onclick="filterPlatform('aws',this)">AWS</button>
+    <button class="ptab" onclick="filterPlatform('databricks',this)">Databricks</button>
+    <button class="ptab" onclick="filterPlatform('github',this)">GitHub</button>
+  </div>
+  <div class="cert-picker" id="cert-picker">
+    <div class="cc cc-aws" data-platform="aws" onclick="loadCert('clf')">
+      <div class="cc-code">CLF-C02</div><div class="cc-name">AWS Cloud Practitioner</div>
+      <div class="cc-desc">Foundational AWS cloud concepts, security, core services, and billing. The entry point to all AWS certifications.</div>
+      <div class="cc-pills"><span class="cc-pill">Cloud concepts</span><span class="cc-pill">Security</span><span class="cc-pill">Services</span><span class="cc-pill">Billing</span></div>
+      <button class="cc-cta">Prepare now ></button>
+    </div>
+    <div class="cc cc-db" data-platform="databricks" onclick="loadCert('dea')">
+      <div class="cc-code">DE Associate</div><div class="cc-name">Databricks Data Engineer</div>
+      <div class="cc-desc">Databricks platform, ETL with Spark SQL and PySpark, Delta Lake, pipelines, orchestration, and Unity Catalog.</div>
+      <div class="cc-pills"><span class="cc-pill">Lakehouse</span><span class="cc-pill">Delta Lake</span><span class="cc-pill">Spark</span><span class="cc-pill">Workflows</span></div>
+      <button class="cc-cta">Prepare now ></button>
+    </div>
+    <div class="cc cc-gh" data-platform="github" onclick="loadCert('ghf')">
+      <div class="cc-code">GH-900</div><div class="cc-name">GitHub Foundations</div>
+      <div class="cc-desc">Git version control, repositories, collaboration, pull requests, GitHub Actions, security, and open source.</div>
+      <div class="cc-pills"><span class="cc-pill">Git basics</span><span class="cc-pill">Collaboration</span><span class="cc-pill">Actions</span><span class="cc-pill">Security</span></div>
+      <button class="cc-cta">Prepare now ></button>
+    </div>
+  </div>
+  <div class="hub-tagline">
+    <span class="hub-tag"><span class="hub-tag-dot" style="background:#FF9900"></span>AWS CLF-C02 - 65 Qs - 90 min - $100</span>
+    <span class="hub-tag"><span class="hub-tag-dot" style="background:#FF3333"></span>Databricks DE Associate - 45 Qs - 90 min - $200</span>
+    <span class="hub-tag"><span class="hub-tag-dot" style="background:#23C55E"></span>GitHub GH-900 - 75 Qs - 120 min - $99</span>
+  </div>
+</div>
+
+<div id="hub">
+  <div class="topbar">
+    <div class="tb-brand" onclick="goHome()"><div class="tb-brand-code" id="brand-code">CLF-C02</div><div class="tb-brand-sub">Study Hub</div></div>
+    <div class="cert-switcher">
+      <button class="ctab" onclick="loadCert('clf')" id="ctab-clf">CLF-C02</button>
+      <button class="ctab" onclick="loadCert('dea')" id="ctab-dea">DE Assoc</button>
+      <button class="ctab" onclick="loadCert('ghf')" id="ctab-ghf">GH-900</button>
+    </div>
+    <div class="sec-tabs" id="sec-tabs">
+      <button class="stab active" onclick="switchTab('overview',this)">Overview</button>
+      <button class="stab" onclick="switchTab('flashcards',this)">Flashcards</button>
+      <button class="stab" onclick="switchTab('quiz',this)">Quiz</button>
+      <button class="stab" onclick="switchTab('cheatsheet',this)">Cheat Sheet</button>
+      <button class="stab" onclick="switchTab('plan',this)">Study Plan</button>
+      <button class="stab" onclick="switchTab('resources',this)">Resources</button>
+      <button class="stab stab-updates" onclick="switchTab('updates',this)">AI Updates</button>
+    </div>
+    <button class="back-btn" onclick="goHome()">All certs</button>
+  </div>
+  <div class="streak-bar" id="streak-bar">
+    <div class="streak-item"><div class="streak-dot"></div>Cert: <span class="streak-val" id="streak-cert">-</span></div>
+    <div class="streak-item"><div class="streak-dot" style="background:#23C55E"></div>Quiz best: <span class="streak-val" id="streak-quiz">-</span></div>
+    <div class="streak-item"><div class="streak-dot" style="background:#9B7DFF"></div>Cards: <span class="streak-val" id="streak-cards">0</span></div>
+    <div class="streak-item"><div class="streak-dot" style="background:#F59E0B"></div>Tasks: <span class="streak-val" id="streak-tasks">0</span></div>
+  </div>
+  <main>
+    <div id="p-overview" class="panel active"></div>
+    <div id="p-flashcards" class="panel"></div>
+    <div id="p-quiz" class="panel"></div>
+    <div id="p-cheatsheet" class="panel"></div>
+    <div id="p-plan" class="panel"></div>
+    <div id="p-resources" class="panel"></div>
+    <div id="p-updates" class="panel"></div>
+  </main>
+  <div class="hub-footer" id="hub-footer"></div>
+</div>
+
+<script>
+var CERTS = {
+
+clf: {
+  code:"CLF-C02", name:"AWS Cloud Practitioner",
+  color:"#FF9900", bg:"rgba(255,153,0,.1)", bd:"rgba(255,153,0,.28)", colorText:"#000",
+  stats:"65 questions (50 scored) - 90 minutes - 700/1000 to pass - Valid 3 years",
+  tagline:"AWS cloud concepts, security, services and billing - Updated 2026",
+  tags:["24% Cloud concepts","30% Security and compliance","34% Cloud technology","12% Billing and support"],
+  regSteps:[
+    'Create an AWS account at <a href="https://aws.amazon.com" target="_blank">aws.amazon.com</a>',
+    'Go to <a href="https://aws.amazon.com/certification/certified-cloud-practitioner/" target="_blank">AWS Cloud Practitioner cert page</a> and click "Schedule exam" via Pearson VUE or PSI',
+    'Take the free <a href="https://explore.skillbuilder.aws/learn/courses/14637/aws-certified-cloud-practitioner-official-practice-question-set-clf-c02" target="_blank">AWS Official Practice Questions</a> on Skill Builder before booking',
+    'Complete the free <a href="https://explore.skillbuilder.aws/learn/course/134/aws-cloud-practitioner-essentials" target="_blank">AWS Cloud Practitioner Essentials</a> course on Skill Builder',
+    'Read the <a href="https://d1.awsstatic.com/training-and-certification/docs-cloud-practitioner/AWS-Certified-Cloud-Practitioner_Exam-Guide.pdf" target="_blank">Official Exam Guide PDF</a> before sitting'
+  ],
+  domains:[
+    {pct:"24%", name:"1 - Cloud concepts", chips:["AWS value proposition","Cloud economics","CapEx vs OpEx","Elasticity and scalability","High availability and fault tolerance","AWS Well-Architected Framework (6 pillars)","Cloud architecture principles","Migration benefits"]},
+    {pct:"30%", name:"2 - Security and compliance", chips:["Shared Responsibility Model","IAM users, groups, roles, policies","MFA and least privilege","AWS security services","AWS Shield and WAF","Amazon GuardDuty","AWS Trusted Advisor security checks","Compliance programs","Data protection and encryption","AWS Artifact"]},
+    {pct:"34%", name:"3 - Cloud technology and services", chips:["Amazon EC2 instance types","AWS Lambda (serverless)","Amazon S3 storage classes","Amazon RDS and DynamoDB","Amazon VPC and subnets","Amazon Route 53","Elastic Load Balancing","Amazon CloudFront (CDN)","AWS CloudWatch","AWS CloudTrail","Amazon SNS and SQS","AWS ECS and EKS","AWS Fargate","AWS Snow Family","AWS Storage Gateway"]},
+    {pct:"12%", name:"4 - Billing, pricing and support", chips:["AWS Free Tier","Pay-as-you-go model","Reserved Instances","Spot Instances","Savings Plans","AWS Cost Explorer","AWS Budgets","AWS Pricing Calculator","TCO Calculator","Support plans: Basic, Developer, Business, Enterprise","AWS Trusted Advisor"]},
+  ],
+  highlights:[
+    {t:"Shared Responsibility Model", b:"AWS is responsible for security OF the cloud (hardware, datacenters, hypervisor). YOU are responsible for security IN the cloud (OS, data, applications, IAM config)."},
+    {t:"EC2 purchasing options", b:"On-Demand (pay per hour/second, no commitment). Reserved (1-3 year commitment, up to 72% savings). Spot (up to 90% off but can be interrupted). Savings Plans (flexible, applies to Lambda too)."},
+    {t:"S3 storage classes", b:"Standard (frequent access). Standard-IA (infrequent, cheaper). One Zone-IA (single AZ). Glacier Instant/Flexible/Deep Archive (archival, cheapest). Intelligent-Tiering (auto moves between tiers)."},
+    {t:"Support plan differences", b:"Only Business and Enterprise get 24/7 phone support and full Trusted Advisor checks. Developer gets business-hours email only. Basic is free but has no technical support cases."},
+  ],
+  flashcards:[
+    {cat:"concepts", q:"What is the AWS Shared Responsibility Model?", a:"AWS is responsible for the security OF the cloud (physical datacenters, hardware, network, hypervisor). You (the customer) are responsible for security IN the cloud (OS, applications, data, IAM configuration, encryption).", doc:"https://aws.amazon.com/compliance/shared-responsibility-model/"},
+    {cat:"concepts", q:"What are the 6 pillars of the AWS Well-Architected Framework?", a:"Operational Excellence, Security, Reliability, Performance Efficiency, Cost Optimization, and Sustainability. Used to evaluate and improve cloud architectures.", doc:"https://aws.amazon.com/architecture/well-architected/"},
+    {cat:"concepts", q:"What is the difference between CapEx and OpEx in cloud context?", a:"CapEx (Capital Expenditure) = upfront hardware purchases for on-premises. OpEx (Operational Expenditure) = pay-as-you-go cloud costs. Cloud converts IT from CapEx to OpEx.", doc:"https://explore.skillbuilder.aws/learn/course/134/aws-cloud-practitioner-essentials"},
+    {cat:"concepts", q:"What is elasticity in AWS?", a:"The ability to automatically scale resources up when demand increases and scale down when demand decreases - so you only pay for what you use at any given time.", doc:"https://aws.amazon.com/architecture/well-architected/"},
+    {cat:"security", q:"What is AWS IAM and what are its main components?", a:"Identity and Access Management. Controls who can do what on AWS. Components: Users (individuals), Groups (collections of users), Roles (temporary permissions, used by services and apps), Policies (JSON documents defining permissions).", doc:"https://docs.aws.amazon.com/IAM/latest/UserGuide/introduction.html"},
+    {cat:"security", q:"What is Amazon GuardDuty?", a:"A threat detection service that continuously monitors your AWS accounts and workloads for malicious activity and unauthorized behavior using machine learning and anomaly detection.", doc:"https://aws.amazon.com/guardduty/"},
+    {cat:"security", q:"What is AWS Shield?", a:"A managed DDoS protection service. Shield Standard is free and protects all AWS customers. Shield Advanced provides enhanced protection for EC2, ELB, CloudFront, Route 53 - it costs extra.", doc:"https://aws.amazon.com/shield/"},
+    {cat:"services", q:"What is Amazon EC2?", a:"Elastic Compute Cloud - virtual servers in the cloud. You choose instance type (CPU, RAM), OS, and storage. Purchasing options: On-Demand, Reserved, Spot, Dedicated Hosts, Savings Plans.", doc:"https://aws.amazon.com/ec2/"},
+    {cat:"services", q:"What is AWS Lambda?", a:"A serverless compute service that runs your code in response to events without provisioning or managing servers. You pay only per invocation and duration. Ideal for event-driven, short-running tasks.", doc:"https://aws.amazon.com/lambda/"},
+    {cat:"services", q:"What are the main Amazon S3 storage classes?", a:"Standard (frequent access). Standard-IA (infrequent). One Zone-IA (single AZ). Glacier Instant/Flexible/Deep Archive (archival). Intelligent-Tiering (auto-moves between tiers based on access patterns).", doc:"https://aws.amazon.com/s3/storage-classes/"},
+    {cat:"services", q:"What is Amazon VPC?", a:"Virtual Private Cloud - your own isolated section of the AWS cloud. You define your own IP ranges, subnets (public and private), route tables, internet gateways, and security groups.", doc:"https://aws.amazon.com/vpc/"},
+    {cat:"services", q:"What is Amazon CloudFront?", a:"A Content Delivery Network (CDN) that delivers content with low latency by caching it at edge locations worldwide. Integrates with S3, EC2, and reduces load on origin servers.", doc:"https://aws.amazon.com/cloudfront/"},
+    {cat:"billing", q:"What are AWS Reserved Instances and when should you use them?", a:"A billing model offering up to 72% savings compared to On-Demand in exchange for a 1 or 3 year commitment. Use when you have steady, predictable workloads with consistent resource needs.", doc:"https://aws.amazon.com/ec2/pricing/reserved-instances/"},
+    {cat:"billing", q:"What is the difference between AWS Cost Explorer and AWS Budgets?", a:"Cost Explorer = analyse and visualise your past and current AWS spending. Budgets = set spending or usage thresholds and receive alerts when you approach or exceed them.", doc:"https://aws.amazon.com/aws-cost-management/"},
+    {cat:"billing", q:"What support plan gives you 24/7 phone and chat support plus full Trusted Advisor checks?", a:"Business and Enterprise support plans both provide 24/7 phone and chat access and full Trusted Advisor checks. Developer plan has business-hours email only. Basic plan has no technical support cases.", doc:"https://aws.amazon.com/premiumsupport/plans/"},
+  ],
+  fcCats:["concepts","security","services","billing"],
+  fcCatLabels:{concepts:"Cloud concepts",security:"Security",services:"AWS services",billing:"Billing"},
+  quiz:[
+    {q:"A company is moving from its own data center to AWS. Which expense model shift does this represent?",opts:["OpEx to CapEx","CapEx to OpEx","CapEx to CapEx","OpEx to OpEx"],ans:1,exp:"On-premises data centers require upfront CapEx (capital expenditure) for hardware. AWS uses an OpEx (pay-as-you-go) model with no upfront hardware costs.",doc:"https://explore.skillbuilder.aws/learn/course/134/aws-cloud-practitioner-essentials"},
+    {q:"Under the Shared Responsibility Model, which of the following is ALWAYS the customer's responsibility?",opts:["Physical security of data centers","Hypervisor maintenance","Customer data and IAM configuration","Network hardware"],ans:2,exp:"Customer data and IAM configuration are always the customer's responsibility. AWS is always responsible for physical infrastructure, hardware, hypervisor, and the network.",doc:"https://aws.amazon.com/compliance/shared-responsibility-model/"},
+    {q:"Which AWS service provides serverless compute - running code without managing servers?",opts:["Amazon EC2","Amazon ECS","AWS Lambda","Amazon LightSail"],ans:2,exp:"AWS Lambda is the serverless compute service. You upload code and it runs in response to events. No server provisioning, no management. Pay per invocation.",doc:"https://aws.amazon.com/lambda/"},
+    {q:"A company needs 24/7 phone support and full AWS Trusted Advisor checks. Which support plan is the MINIMUM they need?",opts:["Basic","Developer","Business","Enterprise"],ans:2,exp:"Business is the minimum plan offering 24/7 phone and chat support plus all Trusted Advisor checks. Developer only provides business-hours email. Basic is free with no technical support.",doc:"https://aws.amazon.com/premiumsupport/plans/"},
+    {q:"Which S3 storage class is best for data that is rarely accessed and can tolerate a retrieval time of several hours?",opts:["S3 Standard","S3 Standard-IA","S3 Glacier Flexible Retrieval","S3 One Zone-IA"],ans:2,exp:"S3 Glacier Flexible Retrieval is designed for archival data rarely accessed, with retrieval times from minutes to hours. It is the lowest-cost option for data that does not need immediate access.",doc:"https://aws.amazon.com/s3/storage-classes/"},
+    {q:"A startup wants to save costs on EC2 but can tolerate interruptions to their batch processing job. Which purchasing option fits best?",opts:["On-Demand","Reserved Instances","Spot Instances","Dedicated Hosts"],ans:2,exp:"Spot Instances offer up to 90% savings but can be interrupted by AWS when capacity is needed. They are ideal for fault-tolerant, flexible workloads like batch processing.",doc:"https://aws.amazon.com/ec2/spot/"},
+    {q:"Which AWS service continuously monitors for malicious activity and unauthorized behavior in your AWS accounts?",opts:["AWS Inspector","AWS Shield","Amazon GuardDuty","AWS WAF"],ans:2,exp:"Amazon GuardDuty is a threat detection service that uses ML and anomaly detection to continuously monitor accounts and workloads for suspicious activity.",doc:"https://aws.amazon.com/guardduty/"},
+    {q:"Which tool helps you visualise and analyse your past AWS spending and usage patterns?",opts:["AWS Budgets","AWS Cost Explorer","AWS Pricing Calculator","AWS Trusted Advisor"],ans:1,exp:"AWS Cost Explorer lets you visualise, understand, and analyse your AWS costs and usage over time. Budgets is for setting thresholds and alerts. Pricing Calculator is for estimating future costs.",doc:"https://aws.amazon.com/aws-cost-management/"},
+    {q:"What are the 6 pillars of the AWS Well-Architected Framework?",opts:["Security, Reliability, Cost, Speed, Scalability, Compliance","Operational Excellence, Security, Reliability, Performance Efficiency, Cost Optimization, Sustainability","Security, Availability, Performance, Cost, Governance, Innovation","Compute, Storage, Network, Security, Cost, Management"],ans:1,exp:"The 6 pillars are: Operational Excellence, Security, Reliability, Performance Efficiency, Cost Optimization, and Sustainability. These guide designing and evaluating cloud architectures.",doc:"https://aws.amazon.com/architecture/well-architected/"},
+    {q:"Which AWS service distributes incoming application traffic across multiple targets for high availability?",opts:["Amazon Route 53","AWS CloudFront","Elastic Load Balancing","Amazon VPC"],ans:2,exp:"Elastic Load Balancing (ELB) automatically distributes incoming traffic across multiple targets (EC2 instances, containers, IPs) in one or more Availability Zones.",doc:"https://aws.amazon.com/elasticloadbalancing/"},
+  ],
+  cheatHTML:'<div class="cheat-sec"><div class="cheat-ttl">Shared Responsibility Model <a class="dbadge" href="https://aws.amazon.com/compliance/shared-responsibility-model/" target="_blank">docs</a></div><table class="ctable"><thead><tr><th>Layer</th><th>AWS responsible for</th><th>Customer responsible for</th></tr></thead><tbody><tr><td><span class="ckey">Always AWS</span></td><td>Physical datacenters, hardware, network infrastructure, hypervisor</td><td>-</td></tr><tr><td><span class="ckey">Always Customer</span></td><td>-</td><td>Customer data, IAM config, client-side encryption</td></tr><tr><td><span class="ckey">IaaS (EC2)</span></td><td>Physical, hypervisor, network</td><td>OS, applications, firewall rules, data</td></tr><tr><td><span class="ckey">PaaS (RDS)</span></td><td>Physical, OS, database engine patching</td><td>Data, access management, schema</td></tr><tr><td><span class="ckey">SaaS (S3)</span></td><td>Physical, OS, application</td><td>Data, bucket policies, access control</td></tr></tbody></table></div><div class="cheat-sec"><div class="cheat-ttl">EC2 purchasing options <a class="dbadge" href="https://aws.amazon.com/ec2/pricing/" target="_blank">docs</a></div><table class="ctable"><thead><tr><th>Option</th><th>Use when</th><th>Savings</th></tr></thead><tbody><tr><td><span class="ckey">On-Demand</span></td><td>Unpredictable workloads, dev/test</td><td>Baseline price</td></tr><tr><td><span class="ckey">Reserved</span></td><td>Steady, predictable 1-3 year workloads</td><td>Up to 72%</td></tr><tr><td><span class="ckey">Spot</span></td><td>Fault-tolerant batch jobs (can be interrupted)</td><td>Up to 90%</td></tr><tr><td><span class="ckey">Savings Plans</span></td><td>Flexible commitment across EC2 and Lambda</td><td>Up to 66%</td></tr><tr><td><span class="ckey">Dedicated Hosts</span></td><td>Compliance requiring dedicated hardware</td><td>Highest cost</td></tr></tbody></table></div><div class="cheat-sec"><div class="cheat-ttl">Key AWS services <a class="dbadge" href="https://aws.amazon.com/products/" target="_blank">docs</a></div><table class="ctable"><thead><tr><th>Service</th><th>What it does</th></tr></thead><tbody><tr><td><span class="ckey">EC2</span></td><td>Virtual servers in the cloud (IaaS compute)</td></tr><tr><td><span class="ckey">Lambda</span></td><td>Serverless, event-driven code execution</td></tr><tr><td><span class="ckey">S3</span></td><td>Object storage for any type of file</td></tr><tr><td><span class="ckey">RDS</span></td><td>Managed relational database (MySQL, PostgreSQL, etc.)</td></tr><tr><td><span class="ckey">DynamoDB</span></td><td>Managed NoSQL key-value and document database</td></tr><tr><td><span class="ckey">VPC</span></td><td>Your isolated private network in AWS</td></tr><tr><td><span class="ckey">CloudFront</span></td><td>CDN - deliver content with low latency globally</td></tr><tr><td><span class="ckey">Route 53</span></td><td>DNS and domain name management</td></tr><tr><td><span class="ckey">CloudWatch</span></td><td>Monitoring metrics, logs, and alarms</td></tr><tr><td><span class="ckey">CloudTrail</span></td><td>Log and audit all API calls in your account</td></tr><tr><td><span class="ckey">IAM</span></td><td>Users, groups, roles, and policies for access control</td></tr><tr><td><span class="ckey">GuardDuty</span></td><td>Threat detection using ML and anomaly detection</td></tr></tbody></table></div><div class="cheat-sec"><div class="cheat-ttl">Support plans <a class="dbadge" href="https://aws.amazon.com/premiumsupport/plans/" target="_blank">docs</a></div><table class="ctable"><thead><tr><th>Plan</th><th>24/7 phone/chat</th><th>Full Trusted Advisor</th><th>Response time</th></tr></thead><tbody><tr><td><span class="ckey">Basic (free)</span></td><td>No</td><td>No (6 checks only)</td><td>No cases</td></tr><tr><td><span class="ckey">Developer ($29/mo)</span></td><td>No (email only)</td><td>No</td><td>12 hrs (impaired)</td></tr><tr><td><span class="ckey">Business ($100+/mo)</span></td><td>Yes</td><td>Yes</td><td>1 hr (prod down)</td></tr><tr><td><span class="ckey">Enterprise ($15k+/mo)</span></td><td>Yes + TAM</td><td>Yes</td><td>15 min (critical)</td></tr></tbody></table></div>',
+  planDays:[
+    {label:"Week 1 - Cloud concepts and security",tasks:["Study Domain 1: Cloud concepts and AWS value","Complete all Cloud concepts flashcards","Study Domain 2: Shared Responsibility Model and IAM","Complete all Security flashcards"]},
+    {label:"Week 1 - Services deep dive",tasks:["Study Domain 3: Core AWS services (EC2, S3, Lambda, RDS, VPC)","Complete all AWS services flashcards","Study CloudWatch, CloudTrail, ELB, CloudFront","Watch freeCodeCamp AWS Practitioner video"]},
+    {label:"Week 2 - Billing and review",tasks:["Study Domain 4: Billing, pricing, and support plans","Complete all Billing flashcards","Study EC2 pricing options in the cheat sheet","Complete AWS Skill Builder practice questions"]},
+    {label:"Week 2 - Final prep",tasks:["Take the practice quiz (do it twice)","Review every wrong answer and read docs link","Read the Well-Architected Framework 6 pillars","Take official AWS practice exam on Skill Builder"]},
+  ],
+  examDay:["Read questions carefully - watch for NOT/EXCEPT/MOST","Know the Shared Responsibility Model boundaries cold","EC2: On-Demand vs Reserved vs Spot use cases","Only Business/Enterprise get 24/7 phone and full Trusted Advisor","700/1000 to pass (approx 70%)","65 total questions but only 50 are scored","Valid for 3 years - renewal by retaking or passing higher cert"],
+  resources:{
+    official:[
+      {t:"Cert page",n:"AWS Cloud Practitioner Cert Page",d:"Schedule exam, download exam guide, access practice questions.",tag:"Free - Official",u:"https://aws.amazon.com/certification/certified-cloud-practitioner/"},
+      {t:"Free course",n:"AWS Cloud Practitioner Essentials",d:"Official AWS Skill Builder course covering all exam domains. Start here.",tag:"Free - Official",u:"https://explore.skillbuilder.aws/learn/course/134/aws-cloud-practitioner-essentials"},
+      {t:"Practice exam",n:"Official Practice Question Set",d:"AWS official practice questions with explanations on Skill Builder.",tag:"Free - Official",u:"https://explore.skillbuilder.aws/learn/courses/14637"},
+      {t:"Whitepaper",n:"Overview of Amazon Web Services",d:"Essential reading - covers the core services and value proposition tested on the exam.",tag:"Free - Official",u:"https://docs.aws.amazon.com/whitepapers/latest/aws-overview/aws-overview.pdf"},
+    ],
+    youtube:[
+      {t:"Full course - 14 hrs",n:"freeCodeCamp AWS CLF-C02 Course",d:"Comprehensive full-length course covering all 4 domains. One of the most popular free resources.",tag:"Free - Top rated",u:"https://www.youtube.com/watch?v=NhDYbskXRgc"},
+      {t:"Exam cram",n:"Andrew Brown - CLF-C02 Cram",d:"Fast-paced complete review. Excellent for final-day preparation.",tag:"Free - Exam cram",u:"https://www.youtube.com/watch?v=SOTamWNgDKc"},
+      {t:"Full course",n:"Stephane Maarek - AWS Practitioner",d:"Clear, structured breakdown of all exam topics with slides and real examples.",tag:"Free preview - Udemy",u:"https://www.udemy.com/course/aws-certified-cloud-practitioner-new/"},
+    ],
+    tools:[
+      {t:"AWS Free Tier",n:"AWS Free Tier Account",d:"Explore 100+ AWS services free. Hands-on practice makes everything stick.",tag:"Free - 12 months",u:"https://aws.amazon.com/free/"},
+      {t:"Pricing tool",n:"AWS Pricing Calculator",d:"The actual tool tested on the exam. Learn what it does hands-on.",tag:"Free",u:"https://calculator.aws/pricing/2/home"},
+      {t:"Practice",n:"ExamTopics CLF-C02 Questions",d:"Large free question bank with community discussion on each answer.",tag:"Free",u:"https://www.examtopics.com/exams/amazon/aws-certified-cloud-practitioner-clf-c02/"},
+    ],
+  },
+},
+
+dea:{
+  code:"DE Associate", name:"Databricks Data Engineer Associate",
+  color:"#FF3333", bg:"rgba(255,51,51,.1)", bd:"rgba(255,51,51,.28)", colorText:"#fff",
+  stats:"45 questions - 90 minutes - Passing score not disclosed (aim 80%+) - Renew every 2 years",
+  tagline:"Databricks platform, Delta Lake, Spark ETL, pipelines and Unity Catalog - Updated July 2025",
+  tags:["10% Databricks Intelligence Platform","30% Development and ingestion","31% Data processing","18% Productionizing pipelines","11% Data governance"],
+  regSteps:[
+    'Create a Databricks account at <a href="https://www.databricks.com" target="_blank">databricks.com</a> and access Community Edition for free practice',
+    'Go to the <a href="https://www.databricks.com/learn/certification/data-engineer-associate" target="_blank">Data Engineer Associate cert page</a> and register via the exam platform ($200 USD)',
+    'Download the <a href="https://www.databricks.com/sites/default/files/2025-07/databricks-certified-data-engineer-associate-exam-guide-EN.pdf" target="_blank">Official Exam Guide (July 2025)</a> and read it thoroughly',
+    'Complete the official <a href="https://www.databricks.com/learn/training/lakehouse-fundamentals" target="_blank">Databricks Academy courses</a>: Data Engineering with Databricks, Delta Live Tables',
+    'Build real pipelines in Databricks Community Edition - this exam tests practical skills not just theory'
+  ],
+  domains:[
+    {pct:"10%", name:"1 - Databricks Intelligence Platform", chips:["Lakehouse architecture","Data Intelligence Platform value proposition","Control plane vs data plane","Compute types: All-purpose, Job, SQL warehouse","Unity Catalog overview","Databricks workspace features","Delta Lake as the storage foundation"]},
+    {pct:"30%", name:"2 - Development and ingestion", chips:["Auto Loader for incremental ingestion","Databricks Connect","Notebook functionality and magic commands","Widget and parameter passing","Schema inference and evolution","Ingest from cloud storage (S3, ADLS, GCS)","Structured Streaming basics","Debugging tools in Databricks"]},
+    {pct:"31%", name:"3 - Data processing and transformations", chips:["Medallion Architecture (Bronze, Silver, Gold)","Delta Live Tables (DLT) / LakeFlow Declarative Pipelines","Delta Lake DDL and DML","MERGE, COPY INTO operations","PySpark DataFrame API","Spark SQL aggregations and window functions","Incremental processing","Handling complex/nested data (JSON, structs, arrays)","User Defined Functions (UDFs)"]},
+    {pct:"18%", name:"4 - Productionizing data pipelines", chips:["Databricks Workflows (Jobs)","Task dependencies and orchestration","Cluster configuration for jobs","Databricks Asset Bundles (DAB)","CI/CD with DAB","Error handling and monitoring","Job scheduling and triggers","Deployment best practices"]},
+    {pct:"11%", name:"5 - Data governance and quality", chips:["Unity Catalog data governance","Delta Sharing","Lakehouse Federation","Data lineage","Access control: grants, privileges","Data quality constraints in DLT","Audit logging","Row and column level security"]},
+  ],
+  highlights:[
+    {t:"Medallion Architecture layers", b:"Bronze = raw ingested data (as-is from source). Silver = cleaned, validated, conformed data. Gold = business-level aggregates ready for analytics and ML. Know the purpose and characteristics of each layer."},
+    {t:"Auto Loader vs COPY INTO", b:"Auto Loader = incremental, scalable streaming ingestion from cloud storage with schema inference and evolution - best for continuous ingestion. COPY INTO = SQL command for idempotent batch loading."},
+    {t:"Delta Live Tables (DLT)", b:"Databricks framework for building reliable data pipelines declaratively using Python or SQL. Defines tables as datasets with expectations (data quality constraints). Handles orchestration automatically."},
+    {t:"Databricks Asset Bundles (DAB)", b:"Modern CI/CD deployment tool for Databricks. Replaces legacy deployment methods. Bundles jobs, notebooks, and configs into deployable packages for dev/staging/production environments."},
+  ],
+  flashcards:[
+    {cat:"platform", q:"What is the Databricks Lakehouse architecture?", a:"A unified data platform combining the best of data lakes (scalable, cheap storage) and data warehouses (ACID transactions, schema enforcement, BI performance). Built on Delta Lake, enabling both batch and streaming workloads on the same data.", doc:"https://www.databricks.com/glossary/data-lakehouse"},
+    {cat:"platform", q:"What is the difference between the control plane and data plane in Databricks?", a:"Control plane = hosted by Databricks (web app, job scheduler, cluster manager, notebook server). Data plane = runs in YOUR cloud account (EC2/VMs, S3/ADLS storage). Your data never leaves your account.", doc:"https://docs.databricks.com/en/getting-started/overview.html"},
+    {cat:"platform", q:"What is Unity Catalog?", a:"Databricks unified governance solution for data and AI. Provides centralised access control, auditing, lineage tracking, and data discovery across all Databricks workspaces in an organization.", doc:"https://docs.databricks.com/en/data-governance/unity-catalog/index.html"},
+    {cat:"ingestion", q:"What is Auto Loader and when do you use it?", a:"A Databricks feature for incrementally and efficiently ingesting files from cloud storage (S3, ADLS, GCS) into Delta Lake. Supports schema inference and evolution. Best for continuous, streaming ingestion of new files arriving over time.", doc:"https://docs.databricks.com/en/ingestion/auto-loader/index.html"},
+    {cat:"ingestion", q:"What are the three layers of the Medallion Architecture?", a:"Bronze = raw data as ingested from source, no transformations. Silver = cleaned, deduplicated, validated data. Gold = business-level aggregated tables ready for analysts and dashboards.", doc:"https://docs.databricks.com/en/lakehouse/medallion.html"},
+    {cat:"processing", q:"What are Delta Live Tables (DLT)?", a:"A Databricks framework for building reliable data transformation pipelines declaratively. You define tables using Python or SQL with LIVE prefix; DLT handles orchestration, error recovery, and data quality expectations automatically.", doc:"https://docs.databricks.com/en/delta-live-tables/index.html"},
+    {cat:"processing", q:"What is a MERGE operation in Delta Lake?", a:"Upsert operation that matches rows between a source and target table. Updates matching rows, inserts new rows, and optionally deletes rows. Critical for implementing CDC (change data capture) patterns in Delta Lake.", doc:"https://docs.databricks.com/en/delta/merge.html"},
+    {cat:"processing", q:"What are User Defined Functions (UDFs) in Databricks?", a:"Custom functions you define in Python or Scala to extend Spark SQL. Used for complex transformations not available in built-in functions. Scalar UDFs operate row-by-row; Pandas UDFs (vectorized) are much faster.", doc:"https://docs.databricks.com/en/udf/index.html"},
+    {cat:"pipelines", q:"What are Databricks Asset Bundles (DAB)?", a:"A modern CI/CD framework for deploying Databricks projects. Bundles notebooks, jobs, pipelines, and configs into deployable packages. Supports multiple environments (dev, staging, prod) and replaces legacy deployment methods.", doc:"https://docs.databricks.com/en/dev-tools/bundles/index.html"},
+    {cat:"pipelines", q:"What is a Databricks Workflow (Job)?", a:"An automated execution of notebooks, scripts, or DLT pipelines on a schedule or triggered by an event. Jobs can have multiple tasks with dependencies, retries, and email alerts on failure.", doc:"https://docs.databricks.com/en/workflows/index.html"},
+    {cat:"governance", q:"What is Delta Sharing?", a:"An open protocol for securely sharing live Delta Lake data with other organizations - even if they do not use Databricks. Recipients can access shared data using their own tools (Python, Spark, Pandas, BI tools).", doc:"https://docs.databricks.com/en/delta-sharing/index.html"},
+    {cat:"governance", q:"What is Lakehouse Federation in Databricks?", a:"Allows you to query data in external databases (MySQL, PostgreSQL, Snowflake, BigQuery, etc.) directly from Databricks using Unity Catalog, without moving the data. Creates virtual foreign catalogs.", doc:"https://docs.databricks.com/en/query-federation/index.html"},
+  ],
+  fcCats:["platform","ingestion","processing","pipelines","governance"],
+  fcCatLabels:{platform:"Platform",ingestion:"Ingestion",processing:"Processing",pipelines:"Pipelines",governance:"Governance"},
+  quiz:[
+    {q:"Which layer of the Medallion Architecture stores raw data exactly as ingested from source systems?",opts:["Gold","Silver","Bronze","Platinum"],ans:2,exp:"Bronze layer stores raw, unprocessed data as-is from the source. Silver = cleaned/validated. Gold = business-aggregated ready for analytics.",doc:"https://docs.databricks.com/en/lakehouse/medallion.html"},
+    {q:"A data engineer needs to continuously ingest new JSON files arriving in S3 into Delta Lake with automatic schema evolution. Which tool is best?",opts:["COPY INTO","Auto Loader","Delta MERGE","Spark read.format('json')"],ans:1,exp:"Auto Loader is designed for continuous incremental ingestion from cloud storage with built-in schema inference and evolution. It scales to millions of files efficiently.",doc:"https://docs.databricks.com/en/ingestion/auto-loader/index.html"},
+    {q:"What does DLT stand for and what is its main benefit?",opts:["Data Loading Tool - speeds up ingestion","Delta Live Tables - declarative pipeline framework with automatic orchestration","Databricks Logging Tool - monitors jobs","Data Lineage Tracker - tracks data movement"],ans:1,exp:"Delta Live Tables (now also called LakeFlow Declarative Pipelines) is a framework for building reliable ETL pipelines declaratively. DLT handles orchestration, retries, and data quality expectations automatically.",doc:"https://docs.databricks.com/en/delta-live-tables/index.html"},
+    {q:"Which Databricks feature is the recommended modern approach for CI/CD deployment of notebooks and jobs across environments?",opts:["Databricks Repos","Legacy Deployment API","Databricks Asset Bundles (DAB)","Databricks CLI v1"],ans:2,exp:"Databricks Asset Bundles (DAB) is the modern CI/CD tool for deploying Databricks resources. It supports multi-environment configs (dev/staging/prod) and replaces legacy deployment methods.",doc:"https://docs.databricks.com/en/dev-tools/bundles/index.html"},
+    {q:"A team wants to securely share live Delta Lake data with a partner company that does not use Databricks. Which feature enables this?",opts:["Unity Catalog grants","Delta Sharing","Lakehouse Federation","DBFS file sharing"],ans:1,exp:"Delta Sharing is an open protocol for sharing live Delta Lake data with external organizations regardless of their tools. Recipients can use Python, Spark, Pandas, or BI tools to access shared data.",doc:"https://docs.databricks.com/en/delta-sharing/index.html"},
+    {q:"What is the purpose of the MERGE operation in Delta Lake?",opts:["Merge two Delta tables into a single file","Upsert - update matching rows and insert new rows from a source","Merge schema changes from two tables","Combine streaming and batch sources"],ans:1,exp:"MERGE performs an upsert: updates rows that match a condition, inserts rows that do not match, and optionally deletes rows. Essential for implementing Change Data Capture (CDC) patterns.",doc:"https://docs.databricks.com/en/delta/merge.html"},
+    {q:"What does Unity Catalog provide that a standard Databricks workspace does NOT have by default?",opts:["Notebook execution","Job scheduling","Centralised governance with cross-workspace access control, lineage, and audit","Spark cluster management"],ans:2,exp:"Unity Catalog provides a single governance layer across ALL workspaces in an organization - centralised access control, data lineage tracking, audit logging, and discovery features.",doc:"https://docs.databricks.com/en/data-governance/unity-catalog/index.html"},
+    {q:"Which Databricks compute type is most appropriate for running scheduled ETL jobs in production?",opts:["All-purpose cluster (interactive)","Job cluster (single-use, auto-terminates)","SQL warehouse (BI queries)","Databricks Connect (local IDE)"],ans:1,exp:"Job clusters are single-use clusters that start for a job, run it, and automatically terminate. They are cheaper than all-purpose clusters and ideal for scheduled production ETL workloads.",doc:"https://docs.databricks.com/en/clusters/index.html"},
+    {q:"What does Lakehouse Federation allow you to do in Databricks?",opts:["Share data with external organizations","Deploy jobs across multiple clouds","Query data in external databases directly without moving it","Federate user identities across workspaces"],ans:2,exp:"Lakehouse Federation lets you query external databases (PostgreSQL, MySQL, Snowflake, BigQuery etc.) directly from Databricks using Unity Catalog virtual catalogs, without copying the data.",doc:"https://docs.databricks.com/en/query-federation/index.html"},
+    {q:"In a DLT (Delta Live Tables) pipeline, what is an EXPECTATION?",opts:["A trigger that starts the pipeline","A data quality constraint that monitors pipeline data","A type of cluster configuration","A scheduling parameter for job frequency"],ans:1,exp:"Expectations in DLT are data quality constraints defined using Python decorators or SQL constraints. You can configure what happens when data violates an expectation: warn, drop, or fail the pipeline.",doc:"https://docs.databricks.com/en/delta-live-tables/expectations.html"},
+  ],
+  cheatHTML:'<div class="cheat-sec"><div class="cheat-ttl">Medallion architecture <a class="dbadge" href="https://docs.databricks.com/en/lakehouse/medallion.html" target="_blank">docs</a></div><table class="ctable"><thead><tr><th>Layer</th><th>Data state</th><th>Purpose</th></tr></thead><tbody><tr><td><span class="ckey">Bronze</span></td><td>Raw, as-ingested, no transforms</td><td>Historical record, full data retention</td></tr><tr><td><span class="ckey">Silver</span></td><td>Cleaned, validated, deduplicated</td><td>Conformed data for downstream use</td></tr><tr><td><span class="ckey">Gold</span></td><td>Business aggregates, dimensional models</td><td>Ready for BI, dashboards, and ML</td></tr></tbody></table></div><div class="cheat-sec"><div class="cheat-ttl">Ingestion tools compared <a class="dbadge" href="https://docs.databricks.com/en/ingestion/auto-loader/index.html" target="_blank">docs</a></div><table class="ctable"><thead><tr><th>Tool</th><th>Use when</th></tr></thead><tbody><tr><td><span class="ckey">Auto Loader</span></td><td>Continuous incremental ingestion from cloud storage. Supports schema inference and evolution. Scalable to millions of files.</td></tr><tr><td><span class="ckey">COPY INTO</span></td><td>SQL-based idempotent batch loading. Good for smaller, periodic batch ingestion. Simpler syntax.</td></tr><tr><td><span class="ckey">Structured Streaming</span></td><td>Real-time streaming from Kafka, Event Hubs, or other streaming sources.</td></tr></tbody></table></div><div class="cheat-sec"><div class="cheat-ttl">Key Delta Lake operations <a class="dbadge" href="https://docs.databricks.com/en/delta/index.html" target="_blank">docs</a></div><table class="ctable"><thead><tr><th>Operation</th><th>What it does</th></tr></thead><tbody><tr><td><span class="ckey">MERGE</span></td><td>Upsert - update matching rows, insert new rows (CDC pattern)</td></tr><tr><td><span class="ckey">CLONE</span></td><td>Shallow or deep copy of a Delta table</td></tr><tr><td><span class="ckey">OPTIMIZE</span></td><td>Compacts small files into larger ones for better query performance</td></tr><tr><td><span class="ckey">VACUUM</span></td><td>Removes files no longer referenced by Delta log (cleans up old versions)</td></tr><tr><td><span class="ckey">DESCRIBE HISTORY</span></td><td>Shows full transaction history of a Delta table</td></tr><tr><td><span class="ckey">TIME TRAVEL</span></td><td>Query previous versions: SELECT * FROM table VERSION AS OF 5</td></tr></tbody></table></div><div class="cheat-sec"><div class="cheat-ttl">Compute types <a class="dbadge" href="https://docs.databricks.com/en/clusters/index.html" target="_blank">docs</a></div><table class="ctable"><thead><tr><th>Type</th><th>Use case</th></tr></thead><tbody><tr><td><span class="ckey">All-purpose cluster</span></td><td>Interactive notebooks and development. Shared, always-on. More expensive.</td></tr><tr><td><span class="ckey">Job cluster</span></td><td>Production ETL jobs. Single-use, auto-terminates after job. Cheaper.</td></tr><tr><td><span class="ckey">SQL Warehouse</span></td><td>BI queries and Databricks SQL. Optimized for SQL workloads and dashboards.</td></tr></tbody></table></div>',
+  planDays:[
+    {label:"Weeks 1-2 - Platform and ingestion",tasks:["Read official exam guide and create topic checklist","Sign up for Databricks Community Edition (free)","Study Domain 1: Platform architecture and Unity Catalog","Complete all Platform flashcards","Study Domain 2: Auto Loader, notebooks, schema evolution","Build an Auto Loader pipeline in Community Edition"]},
+    {label:"Weeks 2-3 - Processing and pipelines",tasks:["Study Domain 3: Medallion Architecture and Delta Live Tables","Complete all Processing flashcards","Practice MERGE, OPTIMIZE, VACUUM, time travel in Delta Lake","Study Domain 4: Databricks Workflows and Asset Bundles","Build a multi-task Workflow in Community Edition","Complete all Pipeline flashcards"]},
+    {label:"Week 3-4 - Governance and review",tasks:["Study Domain 5: Unity Catalog, Delta Sharing, Lakehouse Federation","Complete all Governance flashcards","Take the practice quiz (twice)","Review wrong answers and read official docs","Attempt full practice exam - aim for 80%+"]},
+    {label:"Final prep",tasks:["Re-read the official exam guide checklist","Review Medallion Architecture layer purposes","Review Delta Live Tables expectations syntax","Review Databricks Asset Bundles structure","Take the official Databricks practice assessment"]},
+  ],
+  examDay:["45 questions - approx 2 minutes each - manage your time","Know Medallion Architecture layers: Bronze, Silver, Gold","Auto Loader vs COPY INTO - know the difference","DLT Expectations: warn vs drop vs fail","Job cluster for production, All-purpose for development","Unity Catalog provides cross-workspace governance","DAB replaces legacy deployment - know its purpose","Renew every 2 years by retaking the exam"],
+  resources:{
+    official:[
+      {t:"Cert page",n:"Databricks DE Associate Cert Page",d:"Register, download exam guide, access Databricks Academy courses.",tag:"Official",u:"https://www.databricks.com/learn/certification/data-engineer-associate"},
+      {t:"Exam guide",n:"Official Exam Guide (July 2025)",d:"The definitive document listing every domain and objective. Read this first.",tag:"Free - Official",u:"https://www.databricks.com/sites/default/files/2025-07/databricks-certified-data-engineer-associate-exam-guide-EN.pdf"},
+      {t:"Free practice",n:"Databricks Academy",d:"Official instructor-led and self-paced courses. Data Engineering with Databricks is essential.",tag:"Free courses available",u:"https://www.databricks.com/learn/training"},
+      {t:"Free sandbox",n:"Databricks Community Edition",d:"Free Databricks workspace to practice notebooks, Delta Lake, and pipelines hands-on.",tag:"Free - Essential",u:"https://community.cloud.databricks.com/"},
+    ],
+    youtube:[
+      {t:"Full course",n:"Advancing Analytics - Databricks DE Associate",d:"Comprehensive exam prep series covering all domains with real Databricks demos.",tag:"Free - Highly rated",u:"https://www.youtube.com/watch?v=Nwv1gJ2qgvA"},
+      {t:"Delta Lake deep dive",n:"Delta Lake Fundamentals",d:"Official Databricks video series on Delta Lake features tested on the exam.",tag:"Free - Official",u:"https://www.youtube.com/watch?v=BMO90DI82Zc"},
+    ],
+    tools:[
+      {t:"Free workspace",n:"Databricks Community Edition",d:"The only truly free way to practice. Build pipelines, try Delta Lake, run notebooks.",tag:"Free",u:"https://community.cloud.databricks.com/"},
+      {t:"Practice questions",n:"ExamTopics Databricks Questions",d:"Free practice questions with community discussion.",tag:"Free",u:"https://www.examtopics.com/exams/databricks/certified-data-engineer-associate/"},
+      {t:"Docs",n:"Databricks Documentation",d:"Official docs for every service tested. Bookmark this.",tag:"Free - Official",u:"https://docs.databricks.com/"},
+    ],
+  },
+},
+
+ghf:{
+  code:"GH-900", name:"GitHub Foundations",
+  color:"#23C55E", bg:"rgba(35,197,94,.1)", bd:"rgba(35,197,94,.28)", colorText:"#000",
+  stats:"75 questions - 120 minutes - 70% to pass - Valid 3 years",
+  tagline:"Git version control, GitHub collaboration, Actions, security and open source - 2026",
+  tags:["30% Collaboration features","22% Intro to Git and GitHub","15% Project management and security","13% Modern development","12% Community and open source"],
+  regSteps:[
+    'Create a GitHub account at <a href="https://github.com" target="_blank">github.com</a> if you do not have one (free)',
+    'Register for the exam at <a href="https://examregistration.github.com" target="_blank">examregistration.github.com</a> ($99 USD, online proctored)',
+    'Take the <a href="https://learn.microsoft.com/en-us/credentials/certifications/github-foundations/practice/assessment?assessmentId=GHF-01&practice-assessment-type=certification" target="_blank">Official Microsoft Practice Assessment</a> before booking',
+    'Work through the <a href="https://learn.microsoft.com/en-us/collections/o1njfe825p602p" target="_blank">GitHub Foundations Microsoft Learn collection</a> (free)',
+    'Practice the exam sandbox at <a href="https://learn.microsoft.com/en-us/credentials/certifications/github-foundations/" target="_blank">the official cert page</a> to get used to question types'
+  ],
+  domains:[
+    {pct:"30%", name:"1 - Collaboration features", chips:["Pull requests: draft, review, merge","Issues: labels, assignees, milestones","Code review: comments, suggestions, approvals","Branch protection rules","CODEOWNERS file","GitHub flow workflow","Merge strategies: merge commit, squash, rebase","GitHub Projects and project boards","Linking issues to pull requests"]},
+    {pct:"22%", name:"2 - Intro to Git and GitHub", chips:["Git: init, clone, add, commit, push, pull","Branches: create, switch, merge","Merge conflicts: detect and resolve","Repository: create, fork, visibility","README, LICENSE, .gitignore","Commit history and diffs","Tags and releases","GitHub Desktop and web editor"]},
+    {pct:"15%", name:"3 - Project management and security", clips:["GitHub Projects (classic and new)","Milestones and roadmaps","Dependabot alerts and updates","Secret scanning","Code scanning and CodeQL basics","GitHub Actions for security automation","Repository roles and permissions","Branch protection and required reviews"]},
+    {pct:"13%", name:"4 - Modern development", chips:["GitHub Actions: workflows, triggers, jobs, steps","YAML workflow syntax","CI/CD pipeline concepts","GitHub Packages","GitHub Codespaces","GitHub Copilot overview","GitHub Pages","Marketplace actions"]},
+    {pct:"12%", name:"5 - Community and open source", chips:["Open source concepts","Forking and contributing","README best practices","CONTRIBUTING.md","CODE_OF_CONDUCT.md","Discussions feature","GitHub Sponsors","Licensing: MIT, Apache, GPL","Inner source concepts"]},
+  ],
+  highlights:[
+    {t:"Pull request lifecycle", b:"Draft PR (work in progress, no review) > Open PR (ready for review) > Review (approve, request changes, comment) > Merge (merge commit, squash, or rebase) > Closed. Know branch protection rules that can block merging."},
+    {t:"Branch protection rules", b:"Prevent force pushes, require pull request reviews before merging, require status checks to pass, require signed commits, require linear history. CODEOWNERS automatically assigns reviewers based on file paths."},
+    {t:"GitHub Actions", b:"YAML-based automation. Triggered by events (push, pull_request, schedule, workflow_dispatch). Consists of workflows > jobs > steps. Steps run actions (from Marketplace) or shell commands. Jobs run on runners (GitHub-hosted or self-hosted)."},
+    {t:"Repository visibility and roles", b:"Public = anyone can view. Private = only invited. Internal = org members only. Roles: Read, Triage, Write, Maintain, Admin. Teams can be assigned roles. Branch protection rules override individual permissions."},
+  ],
+  flashcards:[
+    {cat:"git", q:"What is the difference between git fetch and git pull?", a:"git fetch downloads changes from the remote but does NOT merge them into your local branch - you can review first. git pull = git fetch + git merge (automatically merges). Use fetch when you want to review changes before integrating.", doc:"https://docs.github.com/en/get-started/using-git/getting-changes-from-a-remote-repository"},
+    {cat:"git", q:"What is a merge conflict and how does it occur?", a:"A merge conflict occurs when two branches have made different changes to the same part of the same file. Git cannot automatically decide which change to keep, so you must manually resolve it by editing the conflicting file and committing the resolution.", doc:"https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/addressing-merge-conflicts"},
+    {cat:"git", q:"What is the difference between git merge and git rebase?", a:"git merge creates a merge commit combining two branches - preserves full history. git rebase replays commits from one branch onto another - creates a linear history without merge commits. Rebase is cleaner but rewrites commit history.", doc:"https://docs.github.com/en/get-started/using-git/about-git-rebase"},
+    {cat:"collab", q:"What is a Pull Request and what are its key states?", a:"A Pull Request proposes merging changes from one branch into another. States: Draft (work in progress, signals not ready for review), Open (ready for review), Changes Requested (reviewer asked for updates), Approved (ready to merge), Merged/Closed.", doc:"https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/about-pull-requests"},
+    {cat:"collab", q:"What does a CODEOWNERS file do?", a:"Defines who automatically gets added as a required reviewer when changes are made to specific files or directories. Placed in the root, docs/, or .github/ directory. Format: pattern followed by @username or @org/team.", doc:"https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners"},
+    {cat:"collab", q:"What are branch protection rules?", a:"Repository settings that enforce certain requirements before branches can be merged. Can require: minimum number of approvals, specific status checks to pass, no force pushes, signed commits, up-to-date branches, or CODEOWNERS review.", doc:"https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches/about-protected-branches"},
+    {cat:"actions", q:"What is GitHub Actions?", a:"A CI/CD and automation platform built into GitHub. Triggered by events (push, PR, schedule). Workflows are YAML files in .github/workflows/. Structure: Workflow > Jobs > Steps. Steps run Actions from Marketplace or shell commands.", doc:"https://docs.github.com/en/actions/about-github-actions/understanding-github-actions"},
+    {cat:"actions", q:"What are the main GitHub Actions trigger types?", a:"push (on code push), pull_request (PR events: opened, closed, etc.), schedule (cron), workflow_dispatch (manual trigger), issues, release, and many more. Multiple triggers can be combined in one workflow.", doc:"https://docs.github.com/en/actions/writing-workflows/choosing-when-your-workflow-runs/events-that-trigger-workflows"},
+    {cat:"security", q:"What does Dependabot do?", a:"Automatically scans your dependencies for known security vulnerabilities and creates pull requests to update vulnerable dependencies to safe versions. Can also keep dependencies up to date automatically via Dependabot version updates.", doc:"https://docs.github.com/en/code-security/dependabot/dependabot-alerts/about-dependabot-alerts"},
+    {cat:"security", q:"What is the difference between Secret Scanning and Code Scanning?", a:"Secret Scanning automatically detects accidentally committed secrets (API keys, tokens, passwords) in repos and alerts owners. Code Scanning uses CodeQL or other tools to find security vulnerabilities and bugs in your code logic.", doc:"https://docs.github.com/en/code-security/secret-scanning/about-secret-scanning"},
+    {cat:"community", q:"What files should a well-maintained open source repository have?", a:"README.md (what the project is and how to use it), LICENSE (terms of use), CONTRIBUTING.md (how to contribute), CODE_OF_CONDUCT.md (community standards), .gitignore (files to exclude from git), CHANGELOG (version history).", doc:"https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-readmes"},
+    {cat:"community", q:"What is forking in GitHub and when do you use it?", a:"Forking creates your own copy of someone else's repository under your GitHub account. Used to contribute to projects you do not have write access to: fork > make changes > open a pull request to the original repo.", doc:"https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/working-with-forks/about-forks"},
+  ],
+  fcCats:["git","collab","actions","security","community"],
+  fcCatLabels:{git:"Git basics",collab:"Collaboration",actions:"GitHub Actions",security:"Security",community:"Open source"},
+  quiz:[
+    {q:"A developer runs git fetch origin main. What happens?",opts:["Downloads and immediately merges remote changes into local main","Downloads remote changes to local tracking branch but does NOT merge","Pushes local changes to the remote main branch","Resets local main to match the remote"],ans:1,exp:"git fetch only downloads changes to the local tracking branch. It does NOT merge or modify your working branch. Use git pull to fetch AND merge in one step.",doc:"https://docs.github.com/en/get-started/using-git/getting-changes-from-a-remote-repository"},
+    {q:"Which branch protection rule ensures that specific team members must review changes to critical files before merging?",opts:["Require signed commits","Require status checks to pass","CODEOWNERS with required reviews","Restrict who can push to this branch"],ans:2,exp:"CODEOWNERS file defines which users or teams own specific files/directories. When combined with required reviews, changes to those files require approval from the designated owners.",doc:"https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners"},
+    {q:"What is the purpose of a Draft Pull Request?",opts:["It automatically merges when all checks pass","It signals the PR is not ready for review yet, work is in progress","It is a PR that has been rejected by reviewers","It is a PR that only admins can see"],ans:1,exp:"Draft PRs signal that the work is in progress and the author does not want reviews yet. They cannot be merged while in draft state. Convert to ready when the work is complete.",doc:"https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/about-pull-requests"},
+    {q:"A GitHub Actions workflow needs to run on every push to main AND every night at midnight. Which trigger configuration is correct?",opts:["on: [push, schedule]","on: push: branches: [main] schedule: cron: '0 0 * * *'","on: main and cron","on: workflow_dispatch"],ans:1,exp:"Multiple triggers can be combined. push with branches filter restricts to main, and schedule with cron syntax '0 0 * * *' runs at midnight UTC every day.",doc:"https://docs.github.com/en/actions/writing-workflows/choosing-when-your-workflow-runs/events-that-trigger-workflows"},
+    {q:"Which GitHub security feature automatically opens PRs to update dependencies with known vulnerabilities?",opts:["Secret scanning","Code scanning","Dependabot alerts and updates","GitHub Advisory Database"],ans:2,exp:"Dependabot not only alerts you to vulnerable dependencies, it can also automatically open pull requests to update them to safe versions.",doc:"https://docs.github.com/en/code-security/dependabot/dependabot-alerts/about-dependabot-alerts"},
+    {q:"What is the difference between forking and cloning a repository?",opts:["They are the same","Fork creates your copy on GitHub; clone downloads a copy to your local machine","Fork is for public repos; clone is for private repos","Clone creates a new repo; fork duplicates your own repo"],ans:1,exp:"Fork creates a copy of a repo under your own GitHub account (used to contribute to projects you do not own). Clone downloads a local copy of any repo to your machine (used to work on code locally).",doc:"https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/working-with-forks/about-forks"},
+    {q:"A team wants to merge feature branch commits into main as a single clean commit, without preserving individual commit history. Which merge strategy should they use?",opts:["Merge commit","Rebase and merge","Squash and merge","Fast-forward only"],ans:2,exp:"Squash and merge combines all commits from a feature branch into one single commit on main. Keeps main history clean. Good for small features or bug fixes with many work-in-progress commits.",doc:"https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/incorporating-changes-from-a-pull-request/about-pull-request-merges"},
+    {q:"In a GitHub Actions workflow, what is the correct hierarchy?",opts:["Steps > Jobs > Workflows","Workflows > Steps > Jobs","Workflows > Jobs > Steps","Jobs > Workflows > Steps"],ans:2,exp:"Workflows contain Jobs. Jobs contain Steps. Steps are individual tasks that run actions or shell commands. Jobs run on runners and can run in parallel or in sequence.",doc:"https://docs.github.com/en/actions/about-github-actions/understanding-github-actions"},
+    {q:"What does Secret Scanning detect?",opts:["Vulnerable code logic and security bugs","Accidentally committed API keys, tokens, and passwords in repository content","Dependencies with known CVEs","Hardcoded IP addresses and URLs"],ans:1,exp:"Secret Scanning looks for accidentally committed secrets like API keys, auth tokens, and passwords in repository content. When found, it alerts the owner and can notify the service provider.",doc:"https://docs.github.com/en/code-security/secret-scanning/about-secret-scanning"},
+    {q:"Which file in a repository defines the community standards and expected behavior for contributors?",opts:["CONTRIBUTING.md","LICENSE","README.md","CODE_OF_CONDUCT.md"],ans:3,exp:"CODE_OF_CONDUCT.md defines the standards of behavior expected from community members and contributors. It explains consequences for violations and how to report incidents.",doc:"https://docs.github.com/en/communities/setting-up-your-project-for-healthy-contributions/adding-a-code-of-conduct-to-your-project"},
+  ],
+  cheatHTML:'<div class="cheat-sec"><div class="cheat-ttl">Git essentials <a class="dbadge" href="https://docs.github.com/en/get-started/using-git" target="_blank">docs</a></div><table class="ctable"><thead><tr><th>Command</th><th>What it does</th></tr></thead><tbody><tr><td><span class="ckey">git fetch</span></td><td>Downloads remote changes but does NOT merge - review before integrating</td></tr><tr><td><span class="ckey">git pull</span></td><td>fetch + merge in one command - updates local branch with remote changes</td></tr><tr><td><span class="ckey">git merge</span></td><td>Combines two branches - creates a merge commit, preserves full history</td></tr><tr><td><span class="ckey">git rebase</span></td><td>Replays commits onto another branch - creates linear history, rewrites commits</td></tr><tr><td><span class="ckey">git stash</span></td><td>Temporarily saves uncommitted changes so you can switch branches</td></tr></tbody></table></div><div class="cheat-sec"><div class="cheat-ttl">Pull request merge strategies <a class="dbadge" href="https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/incorporating-changes-from-a-pull-request/about-pull-request-merges" target="_blank">docs</a></div><table class="ctable"><thead><tr><th>Strategy</th><th>Result</th><th>Use when</th></tr></thead><tbody><tr><td><span class="ckey">Merge commit</span></td><td>Creates a merge commit, preserves all individual commits</td><td>Want full history visibility</td></tr><tr><td><span class="ckey">Squash and merge</span></td><td>Combines all PR commits into one commit on target</td><td>Clean main history, small features</td></tr><tr><td><span class="ckey">Rebase and merge</span></td><td>Replays PR commits individually onto target, no merge commit</td><td>Linear history without merge commits</td></tr></tbody></table></div><div class="cheat-sec"><div class="cheat-ttl">GitHub Actions structure <a class="dbadge" href="https://docs.github.com/en/actions/about-github-actions/understanding-github-actions" target="_blank">docs</a></div><table class="ctable"><thead><tr><th>Level</th><th>Description</th></tr></thead><tbody><tr><td><span class="ckey">Workflow</span></td><td>YAML file in .github/workflows/. Triggered by events.</td></tr><tr><td><span class="ckey">Job</span></td><td>Runs on a runner. Jobs run in parallel by default, or sequential with needs:</td></tr><tr><td><span class="ckey">Step</span></td><td>Individual task within a job. Runs an Action (uses:) or shell command (run:)</td></tr><tr><td><span class="ckey">Runner</span></td><td>The machine that executes the job. GitHub-hosted (ubuntu-latest, etc.) or self-hosted.</td></tr></tbody></table></div><div class="cheat-sec"><div class="cheat-ttl">Repository roles <a class="dbadge" href="https://docs.github.com/en/organizations/managing-user-access-to-your-organizations-repositories/managing-repository-roles/repository-roles-for-an-organization" target="_blank">docs</a></div><table class="ctable"><thead><tr><th>Role</th><th>Can do</th></tr></thead><tbody><tr><td><span class="ckey">Read</span></td><td>View and clone repository, open issues, comment</td></tr><tr><td><span class="ckey">Triage</span></td><td>Read + manage issues and PRs without write access</td></tr><tr><td><span class="ckey">Write</span></td><td>Triage + push to branches, create PRs, manage releases</td></tr><tr><td><span class="ckey">Maintain</span></td><td>Write + manage repo settings (no destructive actions)</td></tr><tr><td><span class="ckey">Admin</span></td><td>Full access including delete repo and manage all settings</td></tr></tbody></table></div>',
+  planDays:[
+    {label:"Week 1 - Git and collaboration",tasks:["Study Domain 1: Git fundamentals (init, clone, branches, merge)","Complete all Git flashcards","Study Domain 2: Pull requests, code review, issues","Complete all Collaboration flashcards","Practice creating PRs, branches, and resolving conflicts on GitHub"]},
+    {label:"Week 1 - Actions and security",tasks:["Study Domain 3: GitHub Actions (workflows, jobs, steps, triggers)","Complete all GitHub Actions flashcards","Study Domain 4: Security (Dependabot, secret scanning, code scanning)","Complete all Security flashcards","Create a simple GitHub Actions workflow in your own repo"]},
+    {label:"Week 2 - Projects and open source",tasks:["Study project management features (GitHub Projects, milestones, labels)","Study Domain 5: Open source, forking, community files","Complete all Open source flashcards","Study repository roles and permissions","Review branch protection rules and CODEOWNERS"]},
+    {label:"Final prep",tasks:["Take practice quiz twice","Review every wrong answer and official docs link","Complete the official Microsoft practice assessment","Practice the exam sandbox on the cert page","Study the merge strategies cheat sheet"]},
+  ],
+  examDay:["75 questions in 120 minutes - about 1.5 minutes each","Collaboration features is 30% of the exam - know PRs and issues cold","Know all 5 merge strategies and when to use each","GitHub Actions: Workflow > Job > Step hierarchy","Dependabot = auto PR for vulnerable deps; Secret Scanning = detects committed secrets","70% to pass - roughly 53 correct out of 75","Valid for 3 years from passing date"],
+  resources:{
+    official:[
+      {t:"Cert page",n:"GitHub Foundations Cert Page",d:"Register, access practice assessment, and exam sandbox.",tag:"Official",u:"https://learn.microsoft.com/en-us/credentials/certifications/github-foundations/"},
+      {t:"Practice assessment",n:"Official Microsoft Practice Assessment",d:"Official practice questions aligned to exam domains. Do this before booking.",tag:"Free - Official",u:"https://learn.microsoft.com/en-us/credentials/certifications/github-foundations/practice/assessment"},
+      {t:"Learning collection",n:"GitHub Foundations Microsoft Learn",d:"Free structured learning collection covering all exam domains.",tag:"Free - Official",u:"https://learn.microsoft.com/en-us/collections/o1njfe825p602p"},
+      {t:"Documentation",n:"GitHub Docs",d:"Official GitHub documentation. Bookmark - every exam topic links here.",tag:"Free - Official",u:"https://docs.github.com/en"},
+    ],
+    youtube:[
+      {t:"Full course",n:"Adam Wathan - GitHub Foundations Prep",d:"Complete walkthrough of all GH-900 exam domains with practical demos.",tag:"Free",u:"https://www.youtube.com/watch?v=Jdc0i7RcBv8"},
+      {t:"GitHub Actions crash course",n:"Tech With Tim - GitHub Actions",d:"Practical introduction to GitHub Actions workflows - covers what the exam tests.",tag:"Free",u:"https://www.youtube.com/watch?v=R8_veQiYBjI"},
+    ],
+    tools:[
+      {t:"Free account",n:"GitHub Free Account",d:"Practice everything hands-on. Create repos, write Actions, open PRs. Essential.",tag:"Free",u:"https://github.com/signup"},
+      {t:"Practice exam",n:"Udemy GH-900 Practice Exams",d:"High-quality practice questions closely matching the real exam format.",tag:"Paid - Highly rated",u:"https://www.udemy.com/course/gh-900-github-foundations-practice-exams-2026/"},
+      {t:"Exam registration",n:"GitHub Exam Registration",d:"Official exam registration portal. $99 USD, online proctored.",tag:"Paid - $99",u:"https://examregistration.github.com"},
+    ],
+  },
+},
+
+};
+
+
+var activeCert="clf",quizState={},fcCards=[],fcIndex=0,fcFlipped=false;
+
+function filterPlatform(p,btn){
+  document.querySelectorAll(".ptab").forEach(function(b){b.classList.remove("active");});
+  btn.classList.add("active");
+  document.querySelectorAll(".cc").forEach(function(c){
+    c.style.display=(p==="all"||c.dataset.platform===p)?"":"none";
+  });
+}
+
+function applyAccent(c){
+  var cert=CERTS[c];
+  document.documentElement.style.setProperty("--acc",cert.color);
+  document.documentElement.style.setProperty("--acc-bg",cert.bg);
+  document.documentElement.style.setProperty("--acc-bd",cert.bd);
+  var btnAcc=document.querySelectorAll(".btn-acc");
+  btnAcc.forEach(function(b){b.style.color=cert.colorText||"#000";});
+}
+
+function goHome(){
+  document.getElementById("landing").style.display="flex";
+  document.getElementById("hub").style.display="none";
+  document.documentElement.style.setProperty("--acc","#FF9900");
+  document.documentElement.style.setProperty("--acc-bg","rgba(255,153,0,.1)");
+  document.documentElement.style.setProperty("--acc-bd","rgba(255,153,0,.28)");
+}
+
+function loadCert(c){
+  activeCert=c;
+  quizState={idx:0,score:0,answered:false,wrong:[],started:false,total:0,questions:[]};
+  applyAccent(c);
+  var cert=CERTS[c];
+  document.getElementById("landing").style.display="none";
+  document.getElementById("hub").style.display="block";
+  document.getElementById("brand-code").textContent=cert.code;
+  document.getElementById("hub-footer").textContent=cert.code+" Study Hub - "+cert.tagline;
+  ["clf","dea","ghf"].forEach(function(x){document.getElementById("ctab-"+x).classList.toggle("active",x===c);});
+  document.querySelectorAll(".stab").forEach(function(t,i){t.classList.toggle("active",i===0);});
+  buildOverview(cert);buildFlashcards(cert);buildCheatsheet(cert);buildPlan(cert,c);buildResources(cert);buildUpdates(cert);
+  showPanel("overview");setTimeout(updateStreak,100);
+}
+
+function switchTab(id,btn){
+  document.querySelectorAll(".stab").forEach(function(b){b.classList.remove("active");});
+  btn.classList.add("active");showPanel(id);
+  if(id==="quiz"&&!quizState.started)startQuiz();
+  if(id==="updates")buildUpdates(CERTS[activeCert]);
+}
+
+function showPanel(id){document.querySelectorAll(".panel").forEach(function(p){p.classList.remove("active");});document.getElementById("p-"+id).classList.add("active");}
+
+function buildOverview(cert){
+  var domains=cert.domains.map(function(d){return "<div class=\"dcard\"><div class=\"dcard-top\"><span class=\"dpct\">"+d.pct+"</span><span class=\"dname\">"+d.name+"</span></div><div class=\"chips\">"+d.chips.map(function(c){return "<span class=\"chip\">"+c+"</span>";}).join("")+"</div></div>";}).join("");
+  var tags=cert.tags.map(function(t){return "<span class=\"ctag\">"+t+"</span>";}).join("");
+  var hl=cert.highlights.map(function(h){return "<li><strong>"+h.t+":</strong> "+h.b+"</li>";}).join("");
+  var rs=cert.regSteps.map(function(s){return "<li>"+s+"</li>";}).join("");
+  document.getElementById("p-overview").innerHTML="<div class=\"cert-hero\"><div class=\"cert-hero-code\">"+cert.code+"</div><div><div class=\"cert-hero-name\">"+cert.name+"</div><div class=\"cert-hero-meta\">"+cert.stats+"</div><div class=\"cert-hero-tags\">"+tags+"</div></div></div><div class=\"slabel\">Exam domains</div><div class=\"stitle\">What is on the test</div><p class=\"sdesc\">"+cert.domains.length+" domains. Prioritise the highest-weighted sections.</p><div class=\"dg\">"+domains+"</div><div class=\"warn-box\"><div class=\"warn-lbl\">Key things examiners test</div><ul>"+hl+"</ul></div><div class=\"reg-card\"><div class=\"reg-title\">How to register</div><ul class=\"reg-steps\">"+rs+"</ul></div>";
+}
+
+function buildFlashcards(cert){
+  fcCards=cert.flashcards.slice();fcIndex=0;fcFlipped=false;
+  var all="<button class=\"fbtn active\" onclick=\"setFcFilter('all',this)\">All ("+cert.flashcards.length+")</button>";
+  var cats=cert.fcCats.map(function(c){var n=cert.flashcards.filter(function(f){return f.cat===c;}).length;return "<button class=\"fbtn\" onclick=\"setFcFilter('"+c+"',this)\">"+cert.fcCatLabels[c]+" ("+n+")</button>";}).join("");
+  document.getElementById("p-flashcards").innerHTML="<div class=\"slabel\">Active recall</div><div class=\"stitle\">Flashcards</div><p class=\"sdesc\">"+cert.flashcards.length+" cards. Tap to flip. Each links to official docs.</p><div class=\"filter-bar\" id=\"fc-filter\">"+all+cats+"</div><div class=\"fc-meta\"><span class=\"fc-count\" id=\"fc-counter\"></span></div><div class=\"pbar-wrap\"><div class=\"pbar\" id=\"fc-pbar\" style=\"width:3%\"></div></div><div class=\"flashcard\" onclick=\"flipCard()\" id=\"flashcard\"><span class=\"fc-cat\" id=\"fc-cat\"></span><div class=\"fc-q\" id=\"fc-q\"></div><div class=\"fc-a\" id=\"fc-a\"></div><div class=\"fc-doc\" id=\"fc-doc\"><a id=\"fc-doc-a\" href=\"#\" target=\"_blank\">Official docs ></a></div><div class=\"fc-hint\" id=\"fc-hint\">tap to reveal</div></div><div class=\"fc-nav\"><button class=\"btn\" onclick=\"prevCard()\">Prev</button><button class=\"btn\" onclick=\"shuffleCards()\">Shuffle</button><button class=\"btn\" onclick=\"nextCard()\">Next</button></div>";
+  renderFc();
+}
+
+function setFcFilter(f,btn){
+  var cert=CERTS[activeCert];
+  document.querySelectorAll("#fc-filter .fbtn").forEach(function(b){b.classList.remove("active");});
+  btn.classList.add("active");
+  fcCards=f==="all"?cert.flashcards.slice():cert.flashcards.filter(function(c){return c.cat===f;});
+  fcIndex=0;renderFc();
+}
+
+function renderFc(){
+  if(!fcCards.length)return;
+  var c=fcCards[fcIndex];var cert=CERTS[activeCert];
+  document.getElementById("fc-q").textContent=c.q;
+  document.getElementById("fc-a").textContent=c.a;
+  document.getElementById("fc-a").classList.remove("show");
+  document.getElementById("fc-hint").style.display="";
+  document.getElementById("fc-doc").classList.remove("show");
+  document.getElementById("fc-doc-a").href=c.doc;
+  document.getElementById("fc-cat").textContent=cert.fcCatLabels[c.cat]||c.cat;
+  document.getElementById("fc-counter").textContent="Card "+(fcIndex+1)+" of "+fcCards.length;
+  document.getElementById("fc-pbar").style.width=((fcIndex+1)/fcCards.length*100)+"%";
+  document.getElementById("flashcard").classList.remove("flipped");
+  fcFlipped=false;
+}
+
+function flipCard(){if(!fcFlipped){document.getElementById("fc-a").classList.add("show");document.getElementById("fc-hint").style.display="none";document.getElementById("fc-doc").classList.add("show");document.getElementById("flashcard").classList.add("flipped");fcFlipped=true;}}
+function nextCard(){fcIndex=(fcIndex+1)%fcCards.length;renderFc();trackCard();}
+function prevCard(){fcIndex=(fcIndex-1+fcCards.length)%fcCards.length;renderFc();trackCard();}
+function shuffleCards(){for(var i=fcCards.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=fcCards[i];fcCards[i]=fcCards[j];fcCards[j]=t;}fcIndex=0;renderFc();}
+function shuffleArray(a){var arr=a.slice();for(var i=arr.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=arr[i];arr[i]=arr[j];arr[j]=t;}return arr;}
+
+function startQuiz(){var cert=CERTS[activeCert];var s=shuffleArray(cert.quiz);quizState={idx:0,score:0,answered:false,wrong:[],started:true,total:s.length,questions:s};renderQuiz();}
+
+function renderQuiz(){
+  var cert=CERTS[activeCert];
+  if(quizState.idx>=quizState.total){renderResults();return;}
+  var q=quizState.questions[quizState.idx];
+  var pct=(quizState.idx/quizState.total*100).toFixed(0);
+  var opts=q.opts.map(function(o,i){return "<button class=\"qopt\" id=\"qo"+i+"\" onclick=\"selectAns("+i+")\">"+o+"</button>";}).join("");
+  document.getElementById("p-quiz").innerHTML="<div class=\"slabel\">Test yourself</div><div class=\"stitle\">Practice Quiz</div><p class=\"sdesc\">"+quizState.total+" scenario questions. Shuffled each attempt. Every answer links to official docs.</p><div class=\"qmeta\">Question "+(quizState.idx+1)+" of "+quizState.total+" - Score: "+quizState.score+"</div><div class=\"pbar-wrap\"><div class=\"pbar\" style=\"width:"+pct+"%\"></div></div><div class=\"qcard\"><div class=\"qq\">"+q.q+"</div><div class=\"qopts\">"+opts+"</div><div class=\"qfb\" id=\"qfb\"></div><div class=\"qfoot\"><button class=\"btn btn-acc\" id=\"qnext\" style=\"display:none\" onclick=\"nextQ()\">Next ></button></div></div>";
+  quizState.answered=false;
+}
+
+function selectAns(i){
+  if(quizState.answered)return;quizState.answered=true;
+  var q=quizState.questions[quizState.idx];
+  document.querySelectorAll(".qopt").forEach(function(o){o.classList.add("disabled");});
+  document.getElementById("qo"+q.ans).classList.add("correct");
+  var fb=document.getElementById("qfb");
+  if(i===q.ans){quizState.score++;fb.innerHTML="Correct! "+q.exp+"<div class=\"qdoc\"><a href=\""+q.doc+"\" target=\"_blank\">Official docs ></a></div>";fb.className="qfb show correct";}
+  else{document.getElementById("qo"+i).classList.add("wrong");fb.innerHTML="Incorrect. "+q.exp+"<div class=\"qdoc\"><a href=\""+q.doc+"\" target=\"_blank\">Official docs ></a></div>";fb.className="qfb show wrong";quizState.wrong.push(q);}
+  document.getElementById("qnext").style.display="";
+}
+
+function nextQ(){quizState.idx++;renderQuiz();}
+
+function renderResults(){
+  var pct=Math.round(quizState.score/quizState.total*100);
+  var grade=pct>=80?"Ready to pass!":pct>=65?"Good - a bit more review needed.":"Keep at it - focus on missed topics.";
+  var col=pct>=80?"#23C55E":pct>=65?"#F59E0B":"#F43F5E";
+  var wh="";
+  quizState.wrong.forEach(function(w){wh+="<div style=\"background:var(--s2);border:1px solid var(--bd);border-radius:var(--r);padding:8px 11px;margin-bottom:6px;font-size:11px;color:var(--t2);line-height:1.5\">"+w.q+"<br><a href=\""+w.doc+"\" target=\"_blank\" style=\"color:var(--acc);text-decoration:none;font-family:var(--mono);font-size:9px;border-bottom:1px solid var(--acc-bd)\">docs ></a></div>";});
+  if(wh)wh="<div style=\"text-align:left;margin-top:18px\"><div style=\"font-family:var(--mono);font-size:9px;color:#F43F5E;text-transform:uppercase;letter-spacing:.12em;margin-bottom:8px\">Review missed topics</div>"+wh+"</div>";
+  var bk="cfh-best-"+activeCert;var prev=parseInt(localStorage.getItem(bk)||"0");
+  if(pct>prev){try{localStorage.setItem(bk,pct+"%");}catch(e){}}
+  document.getElementById("p-quiz").innerHTML="<div class=\"slabel\">Test yourself</div><div class=\"stitle\">Practice Quiz</div><div class=\"rescrd\"><div style=\"font-family:var(--mono);font-size:9px;color:var(--t3);text-transform:uppercase;letter-spacing:.12em;margin-bottom:6px\">Quiz complete</div><div class=\"rsc-n\" style=\"color:"+col+"\">"+quizState.score+"/"+quizState.total+"</div><div class=\"rsc-l\">"+pct+"% - "+grade+"</div><div class=\"rsc-g\"><div class=\"rsc-s\"><div class=\"rsc-sn\" style=\"color:#23C55E\">"+quizState.score+"</div><div class=\"rsc-sl\">Correct</div></div><div class=\"rsc-s\"><div class=\"rsc-sn\" style=\"color:#F43F5E\">"+(quizState.total-quizState.score)+"</div><div class=\"rsc-sl\">Incorrect</div></div></div>"+wh+"<button class=\"btn btn-acc\" onclick=\"restartQuiz()\" style=\"margin-top:18px\">Retake quiz</button></div>";
+  updateStreak();
+}
+
+function restartQuiz(){var cert=CERTS[activeCert];var s=shuffleArray(cert.quiz);quizState={idx:0,score:0,answered:false,wrong:[],started:true,total:s.length,questions:s};renderQuiz();}
+
+function buildCheatsheet(cert){document.getElementById("p-cheatsheet").innerHTML="<div class=\"slabel\">Quick reference</div><div class=\"stitle\">Cheat Sheet</div><p class=\"sdesc\">Most-tested distinctions condensed. Each section links to official docs.</p>"+cert.cheatHTML;}
+
+function buildPlan(cert,c){
+  var days=cert.planDays.map(function(d,di){
+    var tasks=d.tasks.map(function(t,ti){var k=c+"-"+di+"-"+ti;var done=false;try{var s=JSON.parse(localStorage.getItem("cfh-tasks")||"{}");done=!!s[k];}catch(e){}return "<div class=\"ptask "+(done?"done":"")+"\" onclick=\"toggleTask('"+k+"',this)\"><div class=\"pcheck\"></div><span class=\"ptask-text\">"+t+"</span></div>";}).join("");
+    return "<div class=\"pday\"><div class=\"pday-lbl\">"+d.label+"</div>"+tasks+"</div>";
+  }).join("");
+  var examDay=cert.examDay.map(function(t,i){var k=c+"-exam-"+i;var done=false;try{var s=JSON.parse(localStorage.getItem("cfh-tasks")||"{}");done=!!s[k];}catch(e){}return "<div class=\"ptask "+(done?"done":"")+"\" onclick=\"toggleTask('"+k+"',this)\"><div class=\"pcheck\"></div><span class=\"ptask-text\">"+t+"</span></div>";}).join("");
+  document.getElementById("p-plan").innerHTML="<div class=\"slabel\">Study plan</div><div class=\"stitle\">Study Plan</div><p class=\"sdesc\">Tick tasks off as you complete them. Saves in your browser.</p><div class=\"plan-g\">"+days+"</div><div class=\"pday\" style=\"border-radius:var(--rl);background:var(--s1);border:1px solid var(--bd);padding:14px\"><div class=\"pday-lbl\">Exam day checklist</div>"+examDay+"</div>";
+}
+
+function toggleTask(key,el){var s={};try{s=JSON.parse(localStorage.getItem("cfh-tasks")||"{}");}catch(e){}if(s[key]){delete s[key];el.classList.remove("done");}else{s[key]=true;el.classList.add("done");}try{localStorage.setItem("cfh-tasks",JSON.stringify(s));}catch(e){}updateStreak();}
+
+function buildResources(cert){
+  var r=cert.resources;
+  function sec(title,arr){return "<div class=\"res-sec\">"+title+"</div><div class=\"res-g\">"+arr.map(function(x){return "<a href=\""+x.u+"\" target=\"_blank\" class=\"rcard\"><div class=\"rcard-type\">"+x.t+"</div><div class=\"rcard-title\">"+x.n+"</div><div class=\"rcard-desc\">"+x.d+"</div><span class=\"rcard-tag\">"+x.tag+"</span></a>";}).join("")+"</div>";}
+  document.getElementById("p-resources").innerHTML="<div class=\"slabel\">Further study</div><div class=\"stitle\">Resources</div><p class=\"sdesc\">Official content, top YouTube courses, and hands-on tools curated for "+cert.code+".</p>"+sec("Official",r.official)+sec("YouTube training",r.youtube)+sec("Tools and practice",r.tools);
+}
+
+function buildUpdates(cert){
+  var sk="cfh-updates-"+cert.code;var stored=[];try{stored=JSON.parse(localStorage.getItem(sk)||"[]");}catch(e){}
+  var ph="";
+  if(stored.length){stored.forEach(function(u,i){ph+="<div class=\"update-card\"><div class=\"update-card-header\"><span class=\"update-badge\">"+u.type+"</span><span class=\"update-date\">"+u.date+"</span><button onclick=\"deleteUpdate('"+cert.code+"',"+i+")\" style=\"margin-left:auto;font-size:9px;font-family:var(--mono);color:var(--t3);background:none;border:none;cursor:pointer\" onmouseover=\"this.style.color='#F43F5E\'\" onmouseout=\"this.style.color='var(--t3)'\">remove</button></div><div class=\"update-title\">"+u.title+"</div><div class=\"update-body\">"+u.body+"</div></div>";});}
+  else{ph="<div style=\"font-size:12px;color:var(--t3);font-family:var(--mono);padding:16px 0\">No pinned updates yet. Run an AI check above.</div>";}
+  document.getElementById("p-updates").innerHTML="<div class=\"slabel\">Exam intelligence</div><div class=\"stitle\">AI Updates Checker</div><p class=\"sdesc\">Ask Claude to check the latest "+cert.code+" exam changes, new topics, or last-minute tips. Fresh each time.</p><div class=\"ai-checker\"><div class=\"ai-checker-title\">Check for "+cert.code+" updates</div><div class=\"ai-checker-desc\">Claude analyses what it knows about the current "+cert.code+" exam and generates a focused briefing.</div><div class=\"filter-bar\"><button class=\"fbtn active\" onclick=\"runAi('changes','"+cert.code+"',this)\">Recent changes</button><button class=\"fbtn\" onclick=\"runAi('newTopics','"+cert.code+"',this)\">New topics</button><button class=\"fbtn\" onclick=\"runAi('tips','"+cert.code+"',this)\">Last-minute tips</button><button class=\"fbtn\" onclick=\"runAi('compare','"+cert.code+"',this)\">Compare versions</button></div><div class=\"ai-response\" id=\"ai-box\"><div id=\"ai-content\"></div></div></div><div class=\"slabel\" style=\"margin-top:8px\">Pinned log</div><div style=\"font-size:12px;color:var(--t2);margin-bottom:14px;font-weight:400\">AI check results pinned here. Saved in your browser.</div><div id=\"pinned-updates\">"+ph+"</div>";
+}
+
+var AIPROMPTS={
+  changes:function(c){return "You are a certification expert. Describe the most recent changes to the "+c+" exam objectives as of early 2026. Bullet points. Under 250 words.";},
+  newTopics:function(c){return "You are a certification expert. List the most important new or overlooked topics in the "+c+" exam. Numbered list with brief explanations. Under 250 words.";},
+  tips:function(c){return "You are a certification expert. Give 8 specific actionable last-minute exam tips for someone taking the "+c+" exam in 2 days. Direct and concise. Under 250 words.";},
+  compare:function(c){return "You are a certification expert. Compare the current "+c+" exam (2025-2026) to its previous version. What changed in weighting or content? Clear before/after format. Under 250 words.";}
+};
+
+async function runAi(type,code,btn){
+  document.querySelectorAll(".filter-bar .fbtn").forEach(function(b){b.classList.remove("active");});btn.classList.add("active");
+  var box=document.getElementById("ai-box");var content=document.getElementById("ai-content");
+  box.classList.add("show");content.innerHTML="<div class=\"ai-thinking\"><div class=\"ai-dot\"></div><div class=\"ai-dot\"></div><div class=\"ai-dot\"></div><span style=\"margin-left:6px\">Analysing "+code+" exam data...</span></div>";
+  try{
+    var resp=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:1000,messages:[{role:"user",content:AIPROMPTS[type](code)}]})});
+    var data=await resp.json();
+    var text=(data.content||[]).map(function(b){return b.text||"";}).join("")||"No response.";
+    content.innerHTML="<div class=\"ai-output-text\" style=\"color:var(--t1)\">"+text+"</div><div style=\"margin-top:12px;display:flex;gap:8px;flex-wrap:wrap\"><button class=\"btn btn-acc\" onclick=\"pinUpdate('"+code+"','"+type+"')\" >Pin to log</button><span style=\"font-size:10px;color:var(--t3);font-family:var(--mono);align-self:center\">Generated by Claude - verify against official docs</span></div>";
+  }catch(err){content.innerHTML="<div style=\"color:#F87171;font-size:12px\">Could not connect. Check your connection.<br><span style=\"font-size:10px;opacity:.7\">"+err.message+"</span></div>";}
+}
+
+function pinUpdate(code,type){
+  var key="cfh-updates-"+code;var stored=[];try{stored=JSON.parse(localStorage.getItem(key)||"[]");}catch(e){}
+  var content=document.getElementById("ai-content");var textEl=content?content.querySelector(".ai-output-text"):null;var fullText=textEl?textEl.innerText:"See AI Updates tab.";
+  var labels={changes:"Changes",newTopics:"New topics",tips:"Tips",compare:"Comparison"};
+  stored.unshift({type:labels[type]||type,date:new Date().toLocaleDateString("en-GB",{day:"numeric",month:"short",year:"numeric"}),title:(labels[type]||type)+" - "+code,body:fullText.slice(0,800)});
+  if(stored.length>10)stored=stored.slice(0,10);
+  try{localStorage.setItem(key,JSON.stringify(stored));}catch(e){}buildUpdates(CERTS[activeCert]);
+}
+
+function deleteUpdate(code,idx){
+  var key="cfh-updates-"+code;var stored=[];try{stored=JSON.parse(localStorage.getItem(key)||"[]");}catch(e){}
+  stored.splice(idx,1);try{localStorage.setItem(key,JSON.stringify(stored));}catch(e){}buildUpdates(CERTS[activeCert]);
+}
+
+function trackCard(){var k="cfh-cards-"+activeCert;var n=parseInt(localStorage.getItem(k)||"0")+1;try{localStorage.setItem(k,n);}catch(e){}var el=document.getElementById("streak-cards");if(el)el.textContent=n;}
+
+function updateStreak(){
+  var bar=document.getElementById("streak-bar");if(!bar)return;bar.classList.add("show");
+  document.getElementById("streak-cert").textContent=CERTS[activeCert].code;
+  document.getElementById("streak-quiz").textContent=localStorage.getItem("cfh-best-"+activeCert)||"-";
+  document.getElementById("streak-cards").textContent=parseInt(localStorage.getItem("cfh-cards-"+activeCert)||"0");
+  var s={};try{s=JSON.parse(localStorage.getItem("cfh-tasks")||"{}");}catch(e){}
+  document.getElementById("streak-tasks").textContent=Object.keys(s).filter(function(k){return k.startsWith(activeCert+"-");}).length;
+}
+
+document.addEventListener("keydown",function(e){
+  if(!document.getElementById("hub").style.display||document.getElementById("hub").style.display==="none")return;
+  var tabs=["overview","flashcards","quiz","cheatsheet","plan","resources","updates"];
+  var keys={"1":"overview","2":"flashcards","3":"quiz","4":"cheatsheet","5":"plan","6":"resources","7":"updates"};
+  if(keys[e.key]&&!e.ctrlKey&&!e.metaKey&&!e.altKey&&document.activeElement.tagName!=="INPUT"){var id=keys[e.key];var stabs=document.querySelectorAll(".stab");var idx=tabs.indexOf(id);if(idx>=0&&stabs[idx])switchTab(id,stabs[idx]);}
+  if(e.key==="ArrowRight"&&document.getElementById("p-flashcards").classList.contains("active"))nextCard();
+  if(e.key==="ArrowLeft"&&document.getElementById("p-flashcards").classList.contains("active"))prevCard();
+  if(e.key===" "&&document.getElementById("p-flashcards").classList.contains("active")){e.preventDefault();flipCard();}
+  if(e.key==="?"){var kh=document.getElementById("kbd-hint");if(kh)kh.classList.toggle("show");}
+});
+
+document.body.insertAdjacentHTML("beforeend","<div class=\"kbd-hint\" id=\"kbd-hint\"><span style=\"color:var(--t2);margin-right:4px\">Shortcuts:</span><span><span class=\"kbd-key\">1-7</span> tabs</span><span><span class=\"kbd-key\">Space</span> flip</span><span><span class=\"kbd-key\">Arrows</span> prev/next</span><span><span class=\"kbd-key\">?</span> toggle</span></div>");
+
+</script>
+</body>
+</html>
