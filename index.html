@@ -304,6 +304,14 @@ main{max-width:960px;margin:0 auto;padding:28px 18px 80px;position:relative;z-in
 .kbd-key{background:var(--s3);border:1px solid var(--bd2);border-radius:4px;padding:1px 6px;color:var(--t2)}
 
 .hub-footer{text-align:center;padding:14px 20px;font-family:var(--mono);font-size:8px;color:var(--t3);border-top:1px solid var(--bd);position:relative;z-index:1;letter-spacing:.06em}
+.land-author{width:100%;margin-top:32px;padding:14px 20px;border-top:1px solid var(--bd);animation:fadeUp .5s .5s ease both;position:relative;z-index:1}
+.land-author-inner{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:8px;font-family:var(--mono);font-size:9px}
+.land-author-label{color:var(--t3);letter-spacing:.1em;text-transform:uppercase}
+.land-author-name{color:var(--t1);font-weight:700;letter-spacing:.04em}
+.land-author-role{color:var(--t2)}
+.land-author-sep{color:var(--t3)}
+.land-author-link{color:var(--acc);text-decoration:none;border-bottom:1px solid var(--acc-bd);transition:color .2s,border-color .2s;padding-bottom:1px}
+.land-author-link:hover{color:var(--t1);border-color:var(--bd2)}
 
 ::-webkit-scrollbar{width:5px;height:5px}
 ::-webkit-scrollbar-track{background:transparent}
@@ -398,6 +406,20 @@ main{max-width:960px;margin:0 auto;padding:28px 18px 80px;position:relative;z-in
       <div class="cc-desc">Git, repositories, collaboration, pull requests, Actions, security, open source.</div>
       <div class="cc-pills"><span class="cc-pill">Git</span><span class="cc-pill">Collaboration</span><span class="cc-pill">Actions</span></div>
       <button class="cc-cta">Open →</button>
+    </div>
+  </div>
+  <div class="land-author">
+    <div class="land-author-inner">
+      <span class="land-author-label">By</span>
+      <span class="land-author-name">Mohammad Reza Sharifi</span>
+      <span class="land-author-sep">·</span>
+      <span class="land-author-role">Data Solutions Engineer @ Serios Group</span>
+      <span class="land-author-sep">·</span>
+      <a class="land-author-link" href="https://medium.com/@rezatayeb2017" target="_blank">Medium Blog</a>
+      <span class="land-author-sep">·</span>
+      <a class="land-author-link" href="mailto:rezatayeb2017@gmail.com">rezatayeb2017@gmail.com</a>
+      <span class="land-author-sep">·</span>
+      <a class="land-author-link" href="https://github.dev/Mohrezasharifi" target="_blank">GitHub</a>
     </div>
   </div>
 </div>
@@ -1012,7 +1034,7 @@ function loadCert(key){
   buildPlan(cert);
   buildResources(cert);
   buildUpdates(cert);
-  document.getElementById('hub-footer').textContent=cert.code+' · '+cert.stats;
+  document.getElementById('hub-footer').innerHTML=cert.code+' · '+cert.stats+'<span style="margin:0 10px;opacity:.3">·</span>Built by <a href="https://medium.com/@rezatayeb2017" target="_blank" style="color:var(--acc);text-decoration:none;border-bottom:1px solid var(--acc-bd)">Mohammad Reza Sharifi</a> · Data Solutions Engineer @ Serios Group';
   updateStreak();
 }
 
