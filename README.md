@@ -1,4 +1,4 @@
-# Cloud Fundamentals
+# Cloud Fundamentals Roadmap
 
 <img width="1436" height="825" alt="image" src="https://github.com/user-attachments/assets/f586e8f9-6ca9-4704-a346-a347f1b0b9ea" />
 
